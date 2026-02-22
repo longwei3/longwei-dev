@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙伟 | 开发者 & 创业者</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --accent-cyan: #00f5ff;
+            --accent-purple: #a855f7;
+            --accent-pink: #ff00ff;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: none;
+        }
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-cyan);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+            mix-blend-mode: difference;
+        }
+        .cursor.hover { transform: scale(2); background: var(--accent-cyan); }
+        .cursor-glow {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.1) 0%, transparent 70%);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+        }
+        #particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        .bg-effects { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bg-effects::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(ellipse at 20% 20%, rgba(0, 245, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+        @keyframes bgPulse { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-2%, -2%); } }
+        .grid-lines {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: float 20s ease-in-out infinite; }
+        .orb-1 { width: 500px; height: 500px; background: rgba(0, 245, 255, 0.15); top: 5%; right: -10%; }
+        .orb-2 { width: 400px; height: 400px; background: rgba(168, 85, 247, 0.15); bottom: 10%; left: -5%; animation-delay: -7s; }
+        .orb-3 { width: 300px; height: 300px; background: rgba(255, 0, 255, 0.1); top: 50%; left: 50%; transform: translate(-50%, -50%); animation: orbPulse 8s ease-in-out infinite; }
+        @keyframes orbPulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.5); } }
+        @keyframes float { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(30px, -40px); } 50% { transform: translate(-20px, 20px); } 75% { transform: translate(40px, 10px); } }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 0; background: rgba(10, 10, 15, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; }
+        header.scrolled { padding: 12px 0; background: rgba(10, 10, 15, 0.95); }
+        header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav { display: flex; gap: 32px; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.3s; position: relative; padding: 8px 0; }
+        nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--accent-cyan); transition: width 0.3s; box-shadow: 0 0 10px var(--accent-cyan); }
+        nav a:hover { color: var(--text-primary); }
+        nav a:hover::after { width: 100%; }
+        .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 100px; position: relative; }
+        .hero-content { max-width: 800px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px;
+            background: rgba(0, 245, 255, 0.1); border: 1px solid rgba(0, 245, 255, 0.3);
+            border-radius: 100px; font-size: 0.85rem; color: var(--accent-cyan); margin-bottom: 32px;
+            animation: fadeInUp 0.8s ease-out, glow 2s ease-in-out infinite;
+        }
+        .hero-badge::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.4), transparent); animation: shimmer 3s infinite; }
+        @keyframes shimmer { 100% { left: 100%; } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(0, 245, 255, 0.2); } 50% { box-shadow: 0 0 40px rgba(0, 245, 255, 0.5); } }
+        .hero-badge::after { content: ''; width: 8px; height: 8px; background: var(--accent-cyan); border-radius: 50%; animation: pulse 2s infinite; box-shadow: 0 0 10px var(--accent-cyan); }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+        .hero h1 { font-size: clamp(3rem, 8vw, 5rem); font-weight: 700; line-height: 1.1; margin-bottom: 24px; animation: fadeInUp 0.8s ease-out 0.1s both; }
+        .hero h1 .gradient { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 200%; animation: gradientMove 5s ease infinite; }
+        @keyframes gradientMove { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .typing-text { font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 40px; min-height: 1.5em; }
+        .typing-cursor { display: inline-block; width: 3px; height: 1.2em; background: var(--accent-cyan); margin-left: 2px; animation: blink 1s infinite; vertical-align: text-bottom; }
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-cta { display: flex; gap: 16px; margin-bottom: 60px; animation: fadeInUp 0.8s ease-out 0.4s both; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 16px 32px; border-radius: 14px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: all 0.3s; cursor: none; position: relative; overflow: hidden; }
+        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
+        .btn:hover::before { left: 100%; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); color: var(--bg-primary); box-shadow: 0 4px 20px rgba(0, 245, 255, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(0, 245, 255, 0.5); }
+        .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-primary); }
+        .btn-secondary:hover { border-color: var(--accent-cyan); background: rgba(0, 245, 255, 0.1); box-shadow: 0 0 20px rgba(0, 245, 255, 0.2); }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; animation: fadeInUp 0.8s ease-out 0.5s both; }
+        .stat-card { background: rgba(26, 26, 37, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 28px; transition: all 0.4s; position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); opacity: 0; transition: opacity 0.3s; }
+        .stat-card:hover { border-color: rgba(0, 245, 255, 0.3); transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-number { font-size: 2.5rem; font-weight: 700; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'JetBrains Mono', monospace; }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; margin-top: 8px; }
+        .floating-shapes { position: absolute; top: 0; right: 0; width: 50%; height: 100%; pointer-events: none; overflow: hidden; }
+        .shape { position: absolute; border: 1px solid rgba(0, 245, 255, 0.2); animation: shapeFloat 15s ease-in-out infinite; }
+        .shape-1 { width: 100px; height: 100px; top: 20%; right: 20%; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+        .shape-2 { width: 60px; height: 60px; top: 60%; right: 40%; border-radius: 50%; animation-delay: -5s; border-color: rgba(168, 85, 247, 0.2); }
+        .shape-3 { width: 80px; height: 80px; top: 40%; right: 10%; transform: rotate(45deg); animation-delay: -10s; }
+        @keyframes shapeFloat { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 25% { transform: translate(20px, -30px) rotate(5deg); } 50% { transform: translate(-10px, 20px) rotate(-5deg); } 75% { transform: translate(30px, 10px) rotate(10deg); } }
+        section { padding: 120px 0; position: relative; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+        .section-header h2::before, .section-header h2::after { content: ''; position: absolute; top: 50%; width: 50px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-cyan)); }
+        .section-header h2::before { right: 100%; margin-right: 20px; }
+        .section-header h2::after { left: 100%; margin-left: 20px; background: linear-gradient(90deg, var(--accent-cyan), transparent); }
+        .section-header p { color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .gradient-text { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .skill-card { background: rgba(26, 26, 37, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 36px; transition: all 0.4s; position: relative; overflow: hidden; }
+        .skill-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
+        .skill-card:hover { border-color: rgba(0, 245, 255, 0.3); transform: translateY(-12px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4); }
+        .skill-card:hover::before { transform: scaleX(1); }
+        .skill-icon { width: 64px; height: 64px; background: linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(168, 85, 247, 0.2)); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 24px; transition: all 0.3s; }
+        .skill-card:hover .skill-icon { transform: scale(1.1) rotate(5deg); box-shadow: 0 10px 30px rgba(0, 245, 255, 0.3); }
+        .skill-card h3 { font-size: 1.35rem; font-weight: 600; margin-bottom: 12px; }
+        .skill-card p { color: var(--text-secondary); font-size: 0.95rem; }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 28px; }
+        .project-card { background: rgba(26, 26, 37, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; overflow: hidden; transition: all 0.4s; }
+        .project-card:hover { border-color: rgba(168, 85, 247, 0.5); transform: translateY(-12px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4); }
+        .project-image { height: 220px; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card)); display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+        .project-content { padding: 28px; }
+        .project-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+        .project-tag { padding: 6px 14px; background: rgba(0, 245, 255, 0.15); border: 1px solid rgba(0, 245, 255, 0.3); border-radius: 100px; font-size: 0.8rem; color: var(--accent-cyan); }
+        .project-card h3 { font-size: 1.35rem; font-weight: 600; margin-bottom: 10px; }
+        .project-card p { color: var(--text-secondary); font-size: 0.95rem; }
+        .contact { text-align: center; }
+        .contact-card { background: rgba(26, 26, 37, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 30px; padding: 60px; max-width: 600px; margin: 0 auto; position: relative; overflow: hidden; }
+        .contact-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(0, 245, 255, 0.1) 0%, transparent 50%); animation: contactPulse 4s ease-in-out infinite; }
+        @keyframes contactPulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } }
+        .contact-card h3 { font-size: 1.75rem; margin-bottom: 16px; position: relative; z-index: 1; }
+        .contact-card p { color: var(--text-secondary); margin-bottom: 36px; position: relative; z-index: 1; }
+        .email { font-size: 1.5rem; font-weight: 600; color: var(--accent-cyan); text-decoration: none; font-family: 'JetBrains Mono', monospace; position: relative; z-index: 1; transition: all 0.3s; }
+        .email:hover { color: var(--accent-purple); text-shadow: 0 0 20px var(--accent-cyan); }
+        footer { padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; color: var(--text-muted); position: relative; z-index: 2; }
+        footer p { font-size: 0.9rem; }
+        .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; animation: bounce 2s infinite; }
+        .scroll-indicator span { font-size: 0.8rem; color: var(--text-muted); }
+        .scroll-indicator .mouse { width: 24px; height: 40px; border: 2px solid var(--text-muted); border-radius: 12px; position: relative; }
+        .scroll-indicator .mouse::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 4px; height: 8px; background: var(--accent-cyan); border-radius: 2px; animation: scrollMouse 2s infinite; }
+        @keyframes scrollMouse { 0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); } 50% { opacity: 0.5; transform: translateX(-50%) translateY(10px); } }
+        @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
+        @media (max-width: 768px) { nav { display: none; } .stats { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 2.5rem; } .hero-cta { flex-direction: column; } .contact-card { padding: 40px 24px; } .floating-shapes { display: none; } .cursor, .cursor-glow { display: none; } body { cursor: auto; } .btn { cursor: pointer; } }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-glow"></div>
+    <canvas id="particles-canvas"></canvas>
+    <div class="bg-effects">
+        <div class="grid-lines"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <header>
+        <div class="container">
+            <div class="logo">Longwei</div>
+            <nav>
+                <a href="#about">关于</a>
+                <a href="#skills">技能</a>
+                <a href="#projects">项目</a>
+                <a href="#contact">联系</a>
+            </nav>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge"><span>OpenClaw AI Agent</span></div>
+                <h1>你好，我是 <span class="gradient">龙伟</span><br>开发者 & 创业者</h1>
+                <div class="typing-text"><span id="typed-text"></span><span class="typing-cursor"></span></div>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">联系我</a>
+                    <a href="#projects" class="btn btn-secondary">查看项目</a>
+                </div>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number">5+</div><div class="stat-label">年开发经验</div></div>
+                    <div class="stat-card"><div class="stat-number">20+</div><div class="stat-label">完成项目</div></div>
+                    <div class="stat-card"><div class="stat-number">10+</div><div class="stat-label">技术技能</div></div>
+                    <div class="stat-card"><div class="stat-number">∞</div><div class="stat-label">可能性</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        <div class="scroll-indicator"><div class="mouse"></div><span>向下滚动</span></div>
+    </section>
+    <section id="skills">
+        <div class="container">
+            <div class="section-header"><h2>我的 <span class="gradient-text">技能栈</span></h2><p>持续学习新技术，探索无限可能</p></div>
+            <div class="skills-grid">
+                <div class="skill-card"><div class="skill-icon">🚀</div><h3>Web3 开发</h3><p>智能合约、DeFi 协议、Token 发行、钱包集成等区块链开发</p></div>
+                <div class="skill-card"><div class="skill-icon">💻</div><h3>全栈开发</h3><p>React、Next.js、Node.js、TypeScript 等现代 Web 技术</p></div>
+                <div class="skill-card"><div class="skill-icon">🤖</div><h3>AI Agent</h3><p>OpenClaw、LangChain、自动化工作流、AI 集成开发</p></div>
+                <div class="skill-card"><div class="skill-icon">📱</div><h3>移动开发</h3><p>React Native、Expo 跨平台应用开发</p></div>
+                <div class="skill-card"><div class="skill-icon">📈</div><h3>市场营销</h3><p>数字营销、品牌推广、增长策略</p></div>
+                <div class="skill-card"><div class="skill-icon">☁️</div><h3>云服务</h3><p>AWS、Cloudflare、Vercel 部署与架构</p></div>
+            </div>
+        </div>
+    </section>
+    <section id="projects">
+        <div class="container">
+            <div class="section-header"><h2>精选 <span class="gradient-text">项目</span></h2><p>探索我最近的工作与创作</p></div>
+            <div class="projects-grid">
+                <div class="project-card"><div class="project-image">🤖</div><div class="project-content"><div class="project-tags"><span class="project-tag">AI Agent</span><span class="project-tag">Web3</span></div><h3>AI Agent 项目</h3><p>基于 OpenClaw 构建的 AI Agent，具备自动化任务执行能力</p></div></div>
+                <div class="project-card"><div class="project-image">📱</div><div class="project-content"><div class="project-tags"><span class="project-tag">React Native</span><span class="project-tag">Mobile</span></div><h3>跨平台应用</h3><p>使用 React Native / Expo 开发的移动应用</p></div></div>
+                <div class="project-card"><div class="project-image">🌐</div><div class="project-content"><div class="project-tags"><span class="project-tag">Next.js</span><span class="project-tag">Web3</span></div><h3>DApp 开发</h3><p>去中心化应用开发，包含钱包集成与智能合约交互</p></div></div>
+            </div>
+        </div>
+    </section>
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-card"><h3>一起合作？</h3><p>有问题或想合作？随时联系我</p><a href="mailto:your@email.com" class="email">hello@longwei.dev</a></div>
+        </div>
+    </section>
+    <footer><div class="container"><p>© 2026 龙伟. Built with OpenClaw AI Agent.</p></div></footer>
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorGlow = document.querySelector('.cursor-glow');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, .btn, .skill-card, .project-card, .stat-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+        
+        // Particles Canvas
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 245, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        for (let i = 0; i < 100; i++) particles.push(new Particle());
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(0, 245, 255, ${0.1 * (1 - dist / 150)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+        
+        // Typing Effect
+        const text = "专注于软件开发、市场营销与 AI Agent 领域。探索 Web3、自动化与智能化解决方案。";
+        let i = 0;
+        function type() { if (i < text.length) { document.getElementById('typed-text').textContent += text.charAt(i); i++; setTimeout(type, 50); } }
+        setTimeout(type, 1000);
+        
+        // Scroll Effects
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.style.opacity = '1';
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.skill-card, .project-card, .stat-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s, transform 0.6s';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
