@@ -164,7 +164,40 @@
         .scroll-indicator .mouse::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 4px; height: 8px; background: var(--accent-cyan); border-radius: 2px; animation: scrollMouse 2s infinite; }
         @keyframes scrollMouse { 0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); } 50% { opacity: 0.5; transform: translateX(-50%) translateY(10px); } }
         @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
-        @media (max-width: 768px) { nav { display: none; } .stats { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 2.5rem; } .hero-cta { flex-direction: column; } .contact-card { padding: 40px 24px; } .floating-shapes { display: none; } .cursor, .cursor-glow { display: none; } body { cursor: auto; } .btn { cursor: pointer; } }
+        @media (max-width: 768px) {
+            nav { display: none; }
+            .stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .hero h1 { font-size: 2rem; }
+            .hero p, .typing-text { font-size: 1rem; }
+            .hero-cta { flex-direction: column; gap: 12px; }
+            .hero-cta .btn { width: 100%; justify-content: center; }
+            .contact-card { padding: 30px 20px; }
+            .floating-shapes, .scroll-indicator, .cursor, .cursor-glow, #particles-canvas { display: none; }
+            body { cursor: auto; }
+            .btn { cursor: pointer; }
+            .skill-card, .project-card { padding: 24px; }
+            .skill-icon { width: 48px; height: 48px; font-size: 1.25rem; }
+            .stat-card { padding: 20px; }
+            .stat-number { font-size: 1.75rem; }
+            .section-header h2 { font-size: 1.75rem; }
+            .skills-grid, .projects-grid { grid-template-columns: 1fr; gap: 16px; }
+            .hero-badge { padding: 8px 14px; font-size: 0.75rem; }
+            .logo { font-size: 1.25rem; }
+            header { padding: 12px 0; }
+            section { padding: 60px 0; }
+            .orb { display: none; }
+        }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.75rem; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .container { padding: 0 16px; }
+            .project-tags { gap: 6px; }
+            .project-tag { padding: 4px 10px; font-size: 0.7rem; }
+        }
+        @media (hover: none) {
+            .cursor, .cursor-glow { display: none; }
+            body { cursor: auto; }
+        }
     </style>
 </head>
 <body>
