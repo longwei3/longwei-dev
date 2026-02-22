@@ -22,18 +22,14 @@
             --text-muted: #7a687a;
         }
         body {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: auto;
-            overflow-y: auto;
-            cursor: none;
             -webkit-overflow-scrolling: touch;
-            -webkit-text-size-adjust: 100%;
-            -moz-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-            text-size-adjust: 100%;
+            touch-action: pan-y pinch-zoom;
+            overflow-y: scroll;
+            overflow-x: hidden;
         }
         .cursor {
             width: 20px;
@@ -185,20 +181,22 @@
         .mobile-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 101; opacity: 0; transition: opacity 0.3s; }
         .mobile-overlay.active { opacity: 1; }
         
-        /* Mobile - Anti-jump optimizations */
+        /* Mobile - Simple responsive */
         @media (max-width: 768px) {
             :root {
                 --bg-primary: #0d0a15;
                 --bg-secondary: #14121c;
                 --bg-card: #1f1a2a;
-                --accent-cyan: #00f5ff;
-                --accent-purple: #b366ff;
-                --accent-pink: #ff00aa;
+            }
+            
+            * {
+                -webkit-tap-highlight-color: transparent;
             }
             
             body {
-                overflow-y: auto !important;
+                overflow-y: scroll !important;
                 -webkit-overflow-scrolling: touch !important;
+                touch-action: pan-y pinch-zoom !important;
             }
             
             /* Make sections scrollable */
