@@ -2,7 +2,10 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-agent" content="format=html; url=https://longwei3.github.io/longwei-dev">
+    <meta name="browsermode" content="application">
     <title>龙伟 | 开发者 & 创业者</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,9 +18,22 @@
             --pink: #ff00aa;
             --text: #c8b8d8;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-text-size-adjust: none; -moz-text-size-adjust: none; -ms-text-size-adjust: none; text-size-adjust: none; }
-        html, body { zoom: 1; -webkit-zoom: 1; max-scale: 1; }
-        body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: #fff; line-height: 1.6; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { 
+            -webkit-text-size-adjust: 100% !important; 
+            -moz-text-size-adjust: 100% !important; 
+            -ms-text-size-adjust: 100% !important; 
+            text-size-adjust: 100% !important;
+            overflow-x: hidden;
+        }
+        body { 
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: var(--bg); color: #fff; line-height: 1.6; 
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            min-width: 320px;
+            max-width: 100%;
+        }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         header { position: fixed; top: 0; left: 0; right: 0; background: rgba(10,8,18,0.95); padding: 15px 0; z-index: 100; }
         header .container { display: flex; justify-content: space-between; align-items: center; }
