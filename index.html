@@ -186,25 +186,19 @@
                 --bg-card: #222230;
             }
             
-            /* Prevent horizontal scroll and bounce */
+            /* Allow normal scrolling */
             html, body { 
                 overflow-x: hidden; 
                 max-width: 100vw; 
-                height: 100%;
-                overscroll-behavior: none;
+                height: auto;
+                overscroll-behavior: auto;
                 -webkit-overflow-scrolling: touch;
-                position: fixed;
-                width: 100%;
+                position: relative;
             }
             
             /* Make sections scrollable */
-            body > *:not(.bg-effects):not(.cursor):not(.cursor-glow):not(#particles-canvas):not(.mobile-nav-btn):not(.mobile-overlay) {
-                position: relative;
-                z-index: 10;
-            }
-            
             section {
-                overscroll-behavior: contain;
+                overscroll-behavior: auto;
                 -webkit-overflow-scrolling: touch;
             }
             
@@ -462,15 +456,6 @@
             document.querySelector('.mobile-overlay').classList.toggle('active');
             document.body.style.overflow = document.querySelector('.mobile-nav').classList.contains('active') ? 'hidden' : '';
         }
-        
-        // Prevent iOS bounce scroll
-        document.addEventListener('touchmove', function(e) {
-            if (e.target.closest('.mobile-nav')) return;
-            const scrollable = document.documentElement;
-            if (scrollable.scrollTop === 0 || scrollable.scrollTop === scrollable.scrollHeight - scrollable.clientHeight) {
-                e.preventDefault();
-            }
-        }, { passive: false });
         
         // Custom Cursor
         const cursor = document.querySelector('.cursor');
