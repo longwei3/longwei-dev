@@ -10,15 +10,15 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #1a1a25;
+            --bg-primary: #0d0d14;
+            --bg-secondary: #151520;
+            --bg-card: #1e1e2a;
             --accent-cyan: #00f5ff;
             --accent-purple: #a855f7;
             --accent-pink: #ff00ff;
             --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --text-muted: #606070;
+            --text-secondary: #b8b8c8;
+            --text-muted: #6a6a7a;
         }
         body {
             font-family: 'Space Grotesk', sans-serif;
@@ -180,6 +180,12 @@
         
         /* Mobile - Anti-jump optimizations */
         @media (max-width: 768px) {
+            :root {
+                --bg-primary: #12121c;
+                --bg-secondary: #181825;
+                --bg-card: #222230;
+            }
+            
             /* Prevent horizontal scroll and bounce */
             html, body { 
                 overflow-x: hidden; 
