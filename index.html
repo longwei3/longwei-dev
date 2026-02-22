@@ -2,7 +2,10 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
     <title>龙伟 | 开发者 & 创业者</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,9 +30,13 @@
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-y pinch-zoom;
+            touch-action: manipulation;
             overflow-y: scroll;
             overflow-x: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         .cursor {
             width: 20px;
@@ -190,15 +197,31 @@
             }
             
             * {
-            -webkit-text-size-adjust: 100%;
-            -moz-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-            text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100% !important;
+            -moz-text-size-adjust: 100% !important;
+            -ms-text-size-adjust: 100% !important;
+            text-size-adjust: 100% !important;
             max-height: 10000px;
+            zoom: 1 !important;
         }
         
-        input, textarea, select, button {
+        html {
+            zoom: 1 !important;
+            -webkit-zoom: 1 !important;
+            -moz-zoom: 1 !important;
+            -ms-zoom: 1 !important;
+        }
+        
+        body {
+            zoom: 1 !important;
+            -webkit-zoom: 1 !important;
+            -moz-zoom: 1 !important;
+            -ms-zoom: 1 !important;
+        }
+        
+        input, textarea, select, button, a, .btn {
             font-size: 16px !important;
+            -webkit-text-size-adjust: 100% !important;
         }
             
             body {
