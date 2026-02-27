@@ -48,6 +48,13 @@ cd ~/longwei-dev
 ./scripts/deploy-site.sh
 ```
 
+发布前会自动执行安全预检（可单独运行）：
+
+```bash
+cd ~/longwei-dev
+./scripts/security-preflight.sh --source ~/longwei-dev
+```
+
 ### 双击发布（macOS App）
 
 生成桌面发布程序（只需一次）：

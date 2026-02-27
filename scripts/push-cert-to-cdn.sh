@@ -15,8 +15,37 @@ source "${ENV_FILE}"
 : "${CDN_API_REGION:?Missing CDN_API_REGION in ${ENV_FILE}}"
 : "${CDN_DOMAINS:?Missing CDN_DOMAINS in ${ENV_FILE}}"
 
+# Avoid exposing credentials via command-line flags (visible in process listings).
+ALIYUN_CONFIG_FILE="$(mktemp "${TMPDIR:-/tmp}/longwei-aliyun-config.XXXXXX.json")"
+cat >"${ALIYUN_CONFIG_FILE}" <<EOF
+{
+  "current": "default",
+  "profiles": [
+    {
+      "name": "default",
+      "mode": "AK",
+      "access_key_id": "${ALIYUN_ACCESS_KEY_ID}",
+      "access_key_secret": "${ALIYUN_ACCESS_KEY_SECRET}",
+      "region_id": "${CDN_API_REGION}",
+      "output_format": "json",
+      "language": "zh",
+      "site": "china"
+    }
+  ],
+  "meta_path": ""
+}
+EOF
+chmod 600 "${ALIYUN_CONFIG_FILE}"
+cleanup() {
+  rm -f "${ALIYUN_CONFIG_FILE}"
+}
+trap cleanup EXIT
+
 FULLCHAIN="${1:-${CERT_FULLCHAIN:-${HOME}/.acme.sh/longwei.org.cn_ecc/fullchain.cer}}"
 KEYFILE="${2:-${CERT_KEY:-${HOME}/.acme.sh/longwei.org.cn_ecc/longwei.org.cn.key}}"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"${SCRIPT_DIR}/security-preflight.sh" --env-file "${ENV_FILE}" --cert-key "${KEYFILE}"
 
 if [[ ! -f "${FULLCHAIN}" ]]; then
   echo "Full chain cert not found: ${FULLCHAIN}"
@@ -43,10 +72,10 @@ for raw in "${DOMAIN_LIST[@]}"; do
     --SSLPub "${PUB_CONTENT}" \
     --SSLPri "${KEY_CONTENT}" \
     --CertName "${cert_name}" \
+    --config-path "${ALIYUN_CONFIG_FILE}" \
+    --profile default \
     --region "${CDN_API_REGION}" \
-    --mode AK \
-    --access-key-id "${ALIYUN_ACCESS_KEY_ID}" \
-    --access-key-secret "${ALIYUN_ACCESS_KEY_SECRET}" >/dev/null
+    --mode AK >/dev/null
   echo "Pushed certificate to ${domain}"
 done
 

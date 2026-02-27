@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+
+# Local build/cache artifacts
+*.log
+logs/
+.cache/
+tmp/
+dist/
+coverage/
+
+# Editor files
+*.swp
+*.swo
+.vscode/
+.idea/

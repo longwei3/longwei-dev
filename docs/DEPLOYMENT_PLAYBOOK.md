@@ -43,7 +43,8 @@ cd ~/longwei-dev
 
 What this script does:
 
-- Builds a clean staging folder (excluding `.git`, `scripts`, `README.md`).
+- Runs `scripts/security-preflight.sh` before publish.
+- Builds a strict staging folder by allowlist (only web assets such as html/css/js/images).
 - Syncs staging files to OSS bucket.
 - Deletes removed files from OSS.
 - Refreshes CDN cache for `/` and `/index.html` on both domains.
@@ -126,6 +127,13 @@ echo | openssl s_client -connect www.longwei.org.cn:443 -servername www.longwei.
 ## 7. Security Maintenance
 
 - Keep `~/.config/longwei-site/deploy.env` permission `600`.
+- Run preflight manually when needed:
+
+```bash
+cd ~/longwei-dev
+./scripts/security-preflight.sh --source ~/longwei-dev
+```
+
 - Never commit secrets into git.
 - Rotate AccessKey if exposed.
 - After key rotation:

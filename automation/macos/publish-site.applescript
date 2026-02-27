@@ -1,6 +1,6 @@
 on run
-	set homeDir to POSIX path of (path to home folder)
-	set projectDir to homeDir & "longwei-dev"
+	set homeDir to do shell script "/bin/bash -lc 'printf %s \"$HOME\"'"
+	set projectDir to homeDir & "/longwei-dev"
 	set deployScript to projectDir & "/scripts/deploy-site.sh"
 	set envFile to homeDir & ".config/longwei-site/deploy.env"
 	set logDir to homeDir & ".cache/longwei-site"
@@ -12,8 +12,8 @@ on run
 		return
 	end try
 	
-	if (do shell script "/usr/bin/test -x " & quoted form of deployScript & " && echo ok || echo no") is "no" then
-		display dialog "找不到发布脚本: " & deployScript buttons {"好"} default button "好"
+	if (do shell script "/usr/bin/test -f " & quoted form of deployScript & " && echo ok || echo no") is "no" then
+		display dialog "找不到发布脚本: " & deployScript & return & return & "请确认项目目录在: " & projectDir buttons {"好"} default button "好"
 		return
 	end if
 	
@@ -24,7 +24,7 @@ on run
 	
 	set ts to do shell script "/bin/date +%Y%m%d-%H%M%S"
 	set logFile to logDir & "/deploy-app-" & ts & ".log"
-	set runCmd to "/bin/bash -lc " & quoted form of ("cd " & quoted form of projectDir & " && ./scripts/deploy-site.sh > " & quoted form of logFile & " 2>&1")
+	set runCmd to "/bin/bash -lc " & quoted form of ("/bin/bash " & quoted form of deployScript & " > " & quoted form of logFile & " 2>&1")
 	
 	try
 		do shell script runCmd
