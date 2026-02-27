@@ -48,6 +48,19 @@ What this script does:
 - Deletes removed files from OSS.
 - Refreshes CDN cache for `/` and `/index.html` on both domains.
 
+### macOS Double-Click Publish (Optional)
+
+Build launcher app:
+
+```bash
+cd ~/longwei-dev
+./scripts/build-macos-publish-app.sh
+```
+
+Then run by double click:
+
+- `~/Desktop/PublishLongweiSite.app`
+
 ## 3. Verify After Deploy
 
 ```bash

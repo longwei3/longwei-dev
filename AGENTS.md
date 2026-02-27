@@ -25,6 +25,7 @@ This file defines the required workflow for any AI agent working in this reposit
   - `scripts/deploy-site.sh`
   - `scripts/push-cert-to-cdn.sh`
   - `scripts/install-acme-hook.sh`
+  - `scripts/build-macos-publish-app.sh`
 
 ## Standard Update Workflow (for any AI)
 
@@ -35,6 +36,11 @@ This file defines the required workflow for any AI agent working in this reposit
    - `curl -I https://www.longwei.org.cn/`
    - `curl -I https://longwei.org.cn/`
    - both should return `HTTP/1.1 200`.
+
+Optional desktop launcher:
+
+- Build once: `cd ~/longwei-dev && ./scripts/build-macos-publish-app.sh`
+- Then double click `~/Desktop/PublishLongweiSite.app`.
 
 ## Certificate Workflow
 

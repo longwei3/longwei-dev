@@ -48,6 +48,18 @@ cd ~/longwei-dev
 ./scripts/deploy-site.sh
 ```
 
+### 双击发布（macOS App）
+
+生成桌面发布程序（只需一次）：
+
+```bash
+cd ~/longwei-dev
+./scripts/build-macos-publish-app.sh
+```
+
+生成后，桌面会出现：`PublishLongweiSite.app`  
+你可以在 Finder 里重命名为 `发布网站.app`。以后双击它即可发布，不需要手动输入命令。
+
 发布完成后：
 
 - `https://www.longwei.org.cn`
