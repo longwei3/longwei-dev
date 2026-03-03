@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>蔚蓝海湾 Live2D</title>
+  <style>
+    :root {
+      --bg-top: #04213a;
+      --bg-mid: #063b61;
+      --bg-bottom: #021120;
+      --cyan: #7dd3fc;
+      --mint: #5eead4;
+      --text: #e2f4ff;
+      --muted: #9bc4d6;
+      --card: rgba(4, 24, 39, 0.72);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Outfit", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(125, 211, 252, 0.22), transparent 34%),
+        radial-gradient(circle at 84% 14%, rgba(94, 234, 212, 0.16), transparent 38%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 46%, var(--bg-bottom) 100%);
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .topbar {
+      border: 1px solid rgba(125, 211, 252, 0.25);
+      background: rgba(2, 12, 22, 0.56);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar .title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .topbar h1 {
+      font-size: clamp(1.15rem, 2vw, 1.5rem);
+      margin: 0;
+      color: #bfefff;
+      white-space: nowrap;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      text-decoration: none;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 211, 252, 0.35);
+      background: rgba(6, 44, 65, 0.6);
+      color: #d7f6ff;
+      font-size: 0.78rem;
+    }
+
+    .layout {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    }
+
+    .card {
+      border-radius: 16px;
+      border: 1px solid rgba(125, 211, 252, 0.2);
+      background: var(--card);
+      box-shadow: 0 16px 38px rgba(2, 11, 21, 0.42);
+    }
+
+    .stage-card { padding: 12px; }
+
+    .stage {
+      position: relative;
+      min-height: 560px;
+      border-radius: 14px;
+      border: 1px solid rgba(125, 211, 252, 0.25);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 16% 8%, rgba(125, 211, 252, 0.34), transparent 34%),
+        radial-gradient(circle at 82% 0%, rgba(94, 234, 212, 0.2), transparent 36%),
+        linear-gradient(180deg, #06476f 0%, #043a5d 45%, #05253e 76%, #031426 100%);
+      user-select: none;
+    }
+
+    .surface-glow {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: -48px;
+      height: 180px;
+      border-radius: 999px;
+      filter: blur(16px);
+      background: radial-gradient(circle at 50% 50%, rgba(186, 230, 253, 0.72), rgba(125, 211, 252, 0));
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wave {
+      position: absolute;
+      left: -8%;
+      width: 116%;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .wave.back {
+      top: 42%;
+      height: 120px;
+      background: radial-gradient(circle at 50% 50%, rgba(147, 197, 253, 0.3), rgba(7, 89, 133, 0.02));
+      animation: waveBack 9.2s ease-in-out infinite;
+    }
+
+    .wave.front {
+      top: 58%;
+      height: 154px;
+      background: radial-gradient(circle at 50% 50%, rgba(14, 116, 144, 0.4), rgba(8, 47, 73, 0));
+      animation: waveFront 6.8s ease-in-out infinite;
+    }
+
+    .reef {
+      position: absolute;
+      bottom: -8px;
+      width: 190px;
+      height: 230px;
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 10px 20px rgba(1, 8, 16, 0.45));
+    }
+
+    .reef::before,
+    .reef::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      border-radius: 999px 999px 24px 24px;
+      background: linear-gradient(180deg, rgba(45, 212, 191, 0.9), rgba(13, 148, 136, 0.72));
+    }
+
+    .reef::before { left: 34px; width: 38px; height: 168px; }
+    .reef::after  { left: 88px; width: 26px; height: 124px; }
+    .reef.left { left: -28px; }
+    .reef.right { right: -18px; transform: scaleX(-1) scale(0.94); }
+
+    #bubbleLayer, #pearlLayer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -24px;
+      border-radius: 999px;
+      border: 1px solid rgba(186, 230, 253, 0.58);
+      background: rgba(186, 230, 253, 0.2);
+      box-shadow: inset 0 0 6px rgba(186, 230, 253, 0.28);
+      animation: bubbleRise linear infinite;
+    }
+
+    .pearl {
+      pointer-events: auto;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(236, 254, 255, 0.62);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.92), rgba(165, 243, 252, 0.68) 58%, rgba(14, 116, 144, 0.42));
+      box-shadow: 0 0 14px rgba(125, 211, 252, 0.55);
+      transform: translate(-50%, -50%);
+      animation: pearlPulse 1.2s ease-in-out infinite;
+      cursor: pointer;
+      z-index: 12;
+    }
+
+    .hud {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .hud-box {
+      border: 1px solid rgba(125, 211, 252, 0.34);
+      background: rgba(3, 18, 31, 0.72);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .live2d {
+      position: absolute;
+      left: 50%;
+      bottom: 82px;
+      width: 228px;
+      height: 258px;
+      transform: translateX(-50%);
+      transform-origin: 50% 88%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .live2d.float { animation: shrimpFloat 4.2s ease-in-out infinite; }
+    .live2d.wave  { animation: shrimpWave 2.4s ease-in-out infinite; }
+    .live2d.idle  { animation: shrimpIdle 5.8s ease-in-out infinite; }
+
+    .shadow {
+      position: absolute;
+      left: 30px;
+      right: 30px;
+      bottom: 4px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 50% 50%, rgba(2, 6, 23, 0.52), rgba(2, 6, 23, 0));
+      z-index: 1;
+    }
+
+    .body {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      top: 52px;
+      bottom: 52px;
+      border-radius: 45% 45% 42% 42%;
+      background: linear-gradient(170deg, #f97316 0%, #fb7185 44%, #ec4899 100%);
+      box-shadow:
+        inset -8px -10px 18px rgba(190, 24, 93, 0.38),
+        inset 5px 8px 16px rgba(255, 255, 255, 0.24),
+        0 8px 24px rgba(190, 24, 93, 0.24);
+      z-index: 4;
+    }
+
+    .face {
+      position: absolute;
+      left: 64px;
+      right: 64px;
+      top: 78px;
+      height: 94px;
+      border-radius: 40px;
+      background: rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(1px);
+      z-index: 5;
+    }
+
+    .eye {
+      position: absolute;
+      top: 34px;
+      width: 18px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      transform-origin: center;
+      animation: shrimpBlink 4.8s ease-in-out infinite;
+    }
+
+    .eye::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #0f172a;
+    }
+
+    .eye.left { left: 18px; }
+    .eye.right { right: 18px; }
+
+    .mouth {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      width: 34px;
+      height: 16px;
+      transform: translateX(-50%);
+      border-bottom: 3px solid rgba(15, 23, 42, 0.78);
+      border-radius: 0 0 18px 18px;
+    }
+
+    .antenna {
+      position: absolute;
+      top: 20px;
+      width: 78px;
+      height: 16px;
+      border-top: 3px solid rgba(254, 202, 202, 0.86);
+      border-radius: 999px;
+      z-index: 6;
+    }
+
+    .antenna.left { left: 26px; transform: rotate(-14deg); }
+    .antenna.right { right: 26px; transform: scaleX(-1) rotate(-14deg); }
+
+    .claw {
+      position: absolute;
+      top: 132px;
+      width: 46px;
+      height: 80px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+      z-index: 3;
+    }
+
+    .claw.left { left: 18px; transform: rotate(-24deg); }
+    .claw.right { right: 18px; transform: rotate(24deg); }
+
+    .tail {
+      position: absolute;
+      left: 88px;
+      right: 88px;
+      bottom: 24px;
+      height: 52px;
+      border-radius: 42% 42% 58% 58%;
+      background: linear-gradient(180deg, #fb7185 0%, #be185d 100%);
+      z-index: 2;
+      animation: shrimpTail 2.2s ease-in-out infinite;
+    }
+
+    .live2d.focus .mouth { width: 24px; border-radius: 0 0 8px 8px; }
+    .live2d.focus .eye::after { background: #2563eb; }
+    .live2d.sleepy .eye { transform: scaleY(0.35); }
+    .live2d.sleepy .mouth { width: 28px; border-bottom-color: rgba(148, 163, 184, 0.74); }
+
+    .dialog {
+      position: absolute;
+      left: 50%;
+      bottom: 334px;
+      transform: translateX(-50%);
+      min-width: 230px;
+      max-width: min(70vw, 380px);
+      border-radius: 12px;
+      border: 1px solid rgba(125, 211, 252, 0.45);
+      background: rgba(6, 32, 52, 0.76);
+      padding: 8px 10px;
+      font-size: 12px;
+      color: #cff7ff;
+      text-align: center;
+      z-index: 16;
+    }
+
+    .dialog::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      width: 10px;
+      height: 10px;
+      border-right: 1px solid rgba(125, 211, 252, 0.45);
+      border-bottom: 1px solid rgba(125, 211, 252, 0.45);
+      background: rgba(6, 32, 52, 0.76);
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .controls {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .panel {
+      border: 1px solid rgba(125, 211, 252, 0.2);
+      border-radius: 12px;
+      padding: 10px;
+      background: rgba(4, 23, 38, 0.6);
+    }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 0.88rem;
+      color: #b8e9ff;
+      letter-spacing: 0.01em;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .btn {
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.7);
+      color: #dbeafe;
+      border-radius: 10px;
+      padding: 8px 9px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover { border-color: rgba(125, 211, 252, 0.5); }
+    .btn.active {
+      border-color: rgba(125, 211, 252, 0.72);
+      background: rgba(8, 47, 73, 0.78);
+      color: #e0f7ff;
+      box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.3);
+    }
+
+    .start {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 11px;
+      border: 1px solid rgba(94, 234, 212, 0.6);
+      background: linear-gradient(90deg, rgba(20, 184, 166, 0.65), rgba(14, 116, 144, 0.65));
+      color: #ecfeff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .start.running {
+      border-color: rgba(248, 113, 113, 0.58);
+      background: linear-gradient(90deg, rgba(220, 38, 38, 0.58), rgba(190, 24, 93, 0.58));
+    }
+
+    .range-wrap {
+      display: grid;
+      gap: 4px;
+    }
+
+    .range-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: #9ec9db;
+    }
+
+    input[type="range"] { width: 100%; accent-color: #38bdf8; }
+
+    .tips {
+      color: #9fc7d9;
+      font-size: 0.77rem;
+      line-height: 1.45;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      background: rgba(4, 23, 38, 0.88);
+      border: 1px solid rgba(125, 211, 252, 0.38);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      color: #d5f3ff;
+      box-shadow: 0 10px 30px rgba(2, 12, 24, 0.42);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s ease;
+      z-index: 99;
+    }
+
+    .toast.show { opacity: 1; }
+
+    @keyframes waveBack {
+      0%, 100% { transform: translateX(-8%) translateY(0); }
+      50% { transform: translateX(4%) translateY(-6px); }
+    }
+
+    @keyframes waveFront {
+      0%, 100% { transform: translateX(-4%) translateY(0); }
+      50% { transform: translateX(5%) translateY(6px); }
+    }
+
+    @keyframes bubbleRise {
+      0% { transform: translateY(0) scale(0.72); opacity: 0; }
+      12% { opacity: 1; }
+      100% { transform: translateY(-118%) scale(1.24); opacity: 0; }
+    }
+
+    @keyframes pearlPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    @keyframes shrimpFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0) rotate(-1deg); }
+      50% { transform: translateX(-50%) translateY(-14px) rotate(1.2deg); }
+    }
+
+    @keyframes shrimpWave {
+      0%, 100% { transform: translateX(-50%) translateY(-2px) rotate(0deg); }
+      25% { transform: translateX(-50%) translateY(-10px) rotate(-1.4deg); }
+      50% { transform: translateX(-50%) translateY(-6px) rotate(1.3deg); }
+      75% { transform: translateX(-50%) translateY(-12px) rotate(-1deg); }
+    }
+
+    @keyframes shrimpIdle {
+      0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+      50% { transform: translateX(-50%) translateY(-5px) rotate(0.4deg); }
+    }
+
+    @keyframes shrimpBlink {
+      0%, 46%, 52%, 100% { transform: scaleY(1); }
+      48%, 50% { transform: scaleY(0.15); }
+    }
+
+    @keyframes shrimpTail {
+      0%, 100% { transform: rotate(7deg); }
+      50% { transform: rotate(-9deg); }
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .stage { min-height: 510px; }
+      .dialog { bottom: 318px; }
+    }
+
+    @media (max-width: 640px) {
+      .shell { padding: 12px; }
+      .topbar { padding: 10px; }
+      .topbar h1 { font-size: 1.05rem; }
+      .sub { font-size: 0.76rem; }
+      .stage { min-height: 460px; }
+      .live2d { width: 202px; height: 232px; bottom: 76px; }
+      .dialog { bottom: 286px; min-width: 190px; font-size: 11px; }
+      .row { grid-template-columns: 1fr 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar card">
+      <div class="title-wrap">
+        <span>🌊</span>
+        <div>
+          <h1>蔚蓝海湾 · Live2D 独立版</h1>
+          <div class="sub">独立小游戏：控制萌虾潜游，点击珍珠冲击高分</div>
+        </div>
+      </div>
+      <div class="top-links">
+        <a class="pill" href="/">返回个人站</a>
+        <a class="pill" href="/azure-bay-live2d/mvp-interaction.html">互动MVP</a>
+        <a class="pill" href="https://www.longwei.org.cn/mythic-pets/index.html" target="_blank" rel="noopener noreferrer">萌虾牧场</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="stage-card card">
+        <div class="stage" id="stage">
+          <div class="surface-glow" id="surfaceGlow"></div>
+          <div class="wave back" id="waveBack"></div>
+          <div class="wave front" id="waveFront"></div>
+          <div class="reef left"></div>
+          <div class="reef right"></div>
+
+          <div class="hud">
+            <div class="hud-box">分数：<strong id="score">0</strong><br>连击：<strong id="combo">0</strong></div>
+            <div class="hud-box">倒计时：<strong id="timer">60</strong>s<br>历史最高：<strong id="best">0</strong></div>
+          </div>
+
+          <div id="bubbleLayer"></div>
+          <div id="pearlLayer"></div>
+
+          <div class="dialog" id="dialog">海流很温柔，准备采珠吧。</div>
+
+          <div class="live2d float smile" id="live2dShrimp">
+            <div class="shadow"></div>
+            <div class="antenna left"></div>
+            <div class="antenna right"></div>
+            <div class="claw left"></div>
+            <div class="claw right"></div>
+            <div class="tail"></div>
+            <div class="body"></div>
+            <div class="face">
+              <div class="eye left"></div>
+              <div class="eye right"></div>
+              <div class="mouth"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="controls card">
+        <section class="panel">
+          <h2>角色表情</h2>
+          <div class="row" id="expressionRow">
+            <button class="btn active" data-expression="smile">元气</button>
+            <button class="btn" data-expression="focus">专注</button>
+            <button class="btn" data-expression="sleepy">慵懒</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>动作模式</h2>
+          <div class="row" id="motionRow">
+            <button class="btn active" data-motion="float">漂浮</button>
+            <button class="btn" data-motion="wave">摆尾</button>
+            <button class="btn" data-motion="idle">待机</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>游戏控制</h2>
+          <button class="start" id="startBtn">开始 60 秒采珠</button>
+          <div class="range-wrap" style="margin-top:10px;">
+            <div class="range-head"><span>海流速度</span><span id="flowVal">100%</span></div>
+            <input id="flowRange" type="range" min="70" max="140" value="100" />
+          </div>
+          <div class="range-wrap" style="margin-top:10px;">
+            <div class="range-head"><span>海面光晕</span><span id="glowVal">68%</span></div>
+            <input id="glowRange" type="range" min="35" max="95" value="68" />
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>玩法说明</h2>
+          <div class="tips">
+            1) 点击舞台中的珍珠得分，连击越高单颗分越高。<br>
+            2) 漏掉珍珠会重置连击。<br>
+            3) 提高“海流速度”会增加珍珠出现节奏。<br>
+            4) 这是独立游戏，不会改动萌虾牧场存档。
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (function () {
+      const stage = document.getElementById('stage');
+      const bubbleLayer = document.getElementById('bubbleLayer');
+      const pearlLayer = document.getElementById('pearlLayer');
+      const shrimp = document.getElementById('live2dShrimp');
+      const dialog = document.getElementById('dialog');
+      const toast = document.getElementById('toast');
+
+      const scoreEl = document.getElementById('score');
+      const comboEl = document.getElementById('combo');
+      const timerEl = document.getElementById('timer');
+      const bestEl = document.getElementById('best');
+      const startBtn = document.getElementById('startBtn');
+
+      const expressionRow = document.getElementById('expressionRow');
+      const motionRow = document.getElementById('motionRow');
+
+      const flowRange = document.getElementById('flowRange');
+      const flowVal = document.getElementById('flowVal');
+      const glowRange = document.getElementById('glowRange');
+      const glowVal = document.getElementById('glowVal');
+      const surfaceGlow = document.getElementById('surfaceGlow');
+      const waveBack = document.getElementById('waveBack');
+      const waveFront = document.getElementById('waveFront');
+
+      const BEST_KEY = 'azure-bay-live2d-best-score';
+
+      const lines = {
+        smile: '海流很温柔，准备采珠吧。',
+        focus: '专注！下一颗珍珠马上出现。',
+        sleepy: '慢慢来，潮汐会把宝藏送过来。',
+        start: '冲！60 秒内尽可能多收集珍珠。',
+        combo: (value) => `连击 ${value}！保持节奏！`,
+        miss: '漏掉了，连击中断。',
+        done: (score, rank) => `本局 ${score} 分，评级 ${rank}。再来一局？`,
+      };
+
+      const state = {
+        running: false,
+        timer: 60,
+        score: 0,
+        combo: 0,
+        best: Number(localStorage.getItem(BEST_KEY) || 0),
+        flow: 100,
+        glow: 68,
+        expression: 'smile',
+        motion: 'float',
+        timers: {
+          countdown: null,
+          spawn: null,
+          bubble: null,
+        },
+      };
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(showToast._id);
+        showToast._id = setTimeout(() => toast.classList.remove('show'), 1400);
+      }
+
+      function updateHud() {
+        scoreEl.textContent = String(state.score);
+        comboEl.textContent = String(state.combo);
+        timerEl.textContent = String(state.timer);
+        bestEl.textContent = String(state.best);
+      }
+
+      function setDialog(text) {
+        dialog.textContent = text;
+      }
+
+      function setExpression(next) {
+        state.expression = next;
+        shrimp.classList.remove('smile', 'focus', 'sleepy');
+        shrimp.classList.add(next);
+
+        Array.from(expressionRow.querySelectorAll('button')).forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.expression === next);
+        });
+
+        if (!state.running) {
+          setDialog(lines[next] || lines.smile);
+        }
+      }
+
+      function setMotion(next) {
+        state.motion = next;
+        shrimp.classList.remove('float', 'wave', 'idle');
+        shrimp.classList.add(next);
+
+        Array.from(motionRow.querySelectorAll('button')).forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.motion === next);
+        });
+      }
+
+      function applyFlowVisual() {
+        const ratio = state.flow / 100;
+        const back = Math.max(4.8, 9.2 / ratio);
+        const front = Math.max(3.6, 6.8 / ratio);
+        waveBack.style.animationDuration = back.toFixed(2) + 's';
+        waveFront.style.animationDuration = front.toFixed(2) + 's';
+      }
+
+      function applyGlowVisual() {
+        surfaceGlow.style.opacity = Math.max(0.24, Math.min(0.95, state.glow / 100));
+      }
+
+      function clearGameTimers() {
+        if (state.timers.countdown) clearInterval(state.timers.countdown);
+        if (state.timers.spawn) clearInterval(state.timers.spawn);
+        state.timers.countdown = null;
+        state.timers.spawn = null;
+      }
+
+      function clearPearls() {
+        pearlLayer.innerHTML = '';
+      }
+
+      function spawnBubble() {
+        const bubble = document.createElement('span');
+        bubble.className = 'bubble';
+        const size = 8 + Math.random() * 10;
+        const ratio = state.flow / 100;
+        const duration = Math.max(5.2, (6.5 + Math.random() * 4.4) / ratio);
+
+        bubble.style.left = (6 + Math.random() * 88).toFixed(2) + '%';
+        bubble.style.width = size.toFixed(2) + 'px';
+        bubble.style.height = size.toFixed(2) + 'px';
+        bubble.style.animationDuration = duration.toFixed(2) + 's';
+        bubble.style.animationDelay = (Math.random() * 1.8).toFixed(2) + 's';
+        bubble.style.opacity = (0.24 + Math.random() * 0.36).toFixed(2);
+
+        bubbleLayer.appendChild(bubble);
+        setTimeout(() => bubble.remove(), (duration + 1) * 1000);
+      }
+
+      function spawnPearl() {
+        if (!state.running) return;
+
+        const pearl = document.createElement('button');
+        pearl.type = 'button';
+        pearl.className = 'pearl';
+
+        const rect = stage.getBoundingClientRect();
+        const x = 38 + Math.random() * (Math.max(42, rect.width - 76));
+        const y = 120 + Math.random() * (Math.max(80, rect.height - 226));
+        pearl.style.left = x.toFixed(1) + 'px';
+        pearl.style.top = y.toFixed(1) + 'px';
+
+        const lifeMs = Math.max(900, 1900 - state.flow * 5 - Math.min(700, state.score * 1.5));
+        const expireId = setTimeout(() => {
+          if (!pearl.isConnected) return;
+          pearl.remove();
+          if (state.combo > 0) {
+            state.combo = 0;
+            updateHud();
+            setDialog(lines.miss);
+          }
+        }, lifeMs);
+
+        pearl.addEventListener('click', (event) => {
+          event.stopPropagation();
+          clearTimeout(expireId);
+
+          const gain = 10 + state.combo * 2;
+          state.score += gain;
+          state.combo += 1;
+
+          if (state.score > state.best) {
+            state.best = state.score;
+            localStorage.setItem(BEST_KEY, String(state.best));
+          }
+
+          if (state.combo >= 4 && state.combo % 4 === 0) {
+            setDialog(lines.combo(state.combo));
+          }
+
+          if (state.combo >= 6) {
+            setExpression('focus');
+          }
+
+          pearl.remove();
+          updateHud();
+          showToast('+' + gain + ' 分');
+        });
+
+        pearlLayer.appendChild(pearl);
+      }
+
+      function stopGame(finalized) {
+        clearGameTimers();
+        clearPearls();
+        state.running = false;
+        startBtn.classList.remove('running');
+        startBtn.textContent = '开始 60 秒采珠';
+
+        if (finalized) {
+          const rank = state.score >= 700 ? 'S' : state.score >= 500 ? 'A' : state.score >= 320 ? 'B' : 'C';
+          setDialog(lines.done(state.score, rank));
+          showToast('本局结束：' + state.score + ' 分（' + rank + '）');
+        }
+      }
+
+      function startGame() {
+        clearGameTimers();
+        clearPearls();
+
+        state.running = true;
+        state.timer = 60;
+        state.score = 0;
+        state.combo = 0;
+        updateHud();
+
+        startBtn.classList.add('running');
+        startBtn.textContent = '结束本局';
+        setDialog(lines.start);
+
+        const spawnGap = () => Math.max(240, 950 - state.flow * 4 - Math.min(280, state.score * 0.5));
+
+        state.timers.spawn = setInterval(() => {
+          spawnPearl();
+        }, spawnGap());
+
+        state.timers.countdown = setInterval(() => {
+          state.timer -= 1;
+          updateHud();
+
+          if (state.timers.spawn) {
+            clearInterval(state.timers.spawn);
+            state.timers.spawn = setInterval(() => spawnPearl(), spawnGap());
+          }
+
+          if (state.timer <= 0) {
+            stopGame(true);
+          }
+        }, 1000);
+      }
+
+      expressionRow.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const btn = target.closest('button[data-expression]');
+        if (!btn) return;
+        setExpression(btn.dataset.expression);
+      });
+
+      motionRow.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const btn = target.closest('button[data-motion]');
+        if (!btn) return;
+        setMotion(btn.dataset.motion);
+      });
+
+      startBtn.addEventListener('click', () => {
+        if (state.running) {
+          stopGame(false);
+          setDialog(lines[state.expression] || lines.smile);
+          return;
+        }
+        startGame();
+      });
+
+      flowRange.addEventListener('input', () => {
+        state.flow = Number(flowRange.value);
+        flowVal.textContent = state.flow + '%';
+        applyFlowVisual();
+      });
+
+      glowRange.addEventListener('input', () => {
+        state.glow = Number(glowRange.value);
+        glowVal.textContent = state.glow + '%';
+        applyGlowVisual();
+      });
+
+      stage.addEventListener('click', (event) => {
+        if (event.target !== stage && event.target !== bubbleLayer && event.target !== pearlLayer) {
+          return;
+        }
+
+        if (state.running && state.combo > 0) {
+          state.combo = Math.max(0, state.combo - 1);
+          updateHud();
+        }
+      });
+
+      updateHud();
+      applyFlowVisual();
+      applyGlowVisual();
+      setExpression('smile');
+      setMotion('float');
+
+      state.timers.bubble = setInterval(() => {
+        if (!document.hidden) {
+          spawnBubble();
+        }
+      }, 340);
+
+      for (let i = 0; i < 18; i += 1) {
+        setTimeout(spawnBubble, i * 160);
+      }
+
+      window.addEventListener('beforeunload', () => {
+        clearGameTimers();
+        if (state.timers.bubble) clearInterval(state.timers.bubble);
+      });
+    })();
+  </script>
+</body>
+</html>

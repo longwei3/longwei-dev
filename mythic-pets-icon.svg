@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B9D"/>
+      <stop offset="100%" style="stop-color:#C44569"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="80" fill="url(#bg)"/>
+  <!-- Body -->
+  <ellipse cx="256" cy="280" rx="140" ry="120" fill="#FFEAA7"/>
+  <!-- Eyes -->
+  <circle cx="200" cy="240" r="35" fill="white"/>
+  <circle cx="312" cy="240" r="35" fill="white"/>
+  <circle cx="205" cy="245" r="18" fill="#2D3436"/>
+  <circle cx="317" cy="245" r="18" fill="#2D3436"/>
+  <circle cx="210" cy="240" r="6" fill="white"/>
+  <circle cx="322" cy="240" r="6" fill="white"/>
+  <!-- Blush -->
+  <ellipse cx="160" cy="280" rx="20" ry="12" fill="#FFB8B8" opacity="0.6"/>
+  <ellipse cx="352" cy="280" rx="20" ry="12" fill="#FFB8B8" opacity="0.6"/>
+  <!-- Smile -->
+  <path d="M220 300 Q256 340 292 300" stroke="#C44569" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- Antennae -->
+  <path d="M200 160 Q180 100 220 80" stroke="#C44569" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M312 160 Q332 100 292 80" stroke="#C44569" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <circle cx="220" cy="80" r="15" fill="#FFEAA7"/>
+  <circle cx="292" cy="80" r="15" fill="#FFEAA7"/>
+  <!-- Legs -->
+  <path d="M180 380 L160 420" stroke="#C44569" stroke-width="12" stroke-linecap="round"/>
+  <path d="M332 380 L352 420" stroke="#C44569" stroke-width="12" stroke-linecap="round"/>
+</svg>
