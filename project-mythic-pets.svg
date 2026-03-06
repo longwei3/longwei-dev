@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B9D"/>
+      <stop offset="100%" style="stop-color:#C44569"/>
+    </linearGradient>
+  </defs>
+  <rect width="170" height="170" rx="30" fill="url(#bg)"/>
+  <!-- 怪兽身体 -->
+  <ellipse cx="85" cy="100" rx="45" ry="40" fill="#FFEAA7"/>
+  <!-- 眼睛 -->
+  <circle cx="68" cy="85" r="12" fill="white"/>
+  <circle cx="102" cy="85" r="12" fill="white"/>
+  <circle cx="70" cy="87" r="6" fill="#2D3436"/>
+  <circle cx="104" cy="87" r="6" fill="#2D3436"/>
+  <!-- 腮红 -->
+  <ellipse cx="55" cy="100" rx="8" ry="5" fill="#FFB8B8" opacity="0.6"/>
+  <ellipse cx="115" cy="100" rx="8" ry="5" fill="#FFB8B8" opacity="0.6"/>
+  <!-- 微笑 -->
+  <path d="M75 108 Q85 118 95 108" stroke="#C44569" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- 耳朵 -->
+  <circle cx="55" cy="60" r="10" fill="#FFEAA7"/>
+  <circle cx="115" cy="60" r="10" fill="#FFEAA7"/>
+  <circle cx="55" cy="60" r="5" fill="#FF6B9D"/>
+  <circle cx="115" cy="60" r="5" fill="#FF6B9D"/>
+  <!-- 小角 -->
+  <path d="M80 58 L85 45 L90 58" fill="#FFEAA7" stroke="#C44569" stroke-width="1"/>
+</svg>

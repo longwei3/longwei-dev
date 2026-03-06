@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9B5DE5"/>
+      <stop offset="100%" style="stop-color:#5A189A"/>
+    </linearGradient>
+  </defs>
+  <rect width="170" height="170" rx="30" fill="url(#bg)"/>
+  <!-- 机器人头 -->
+  <rect x="50" y="45" width="70" height="60" rx="12" fill="#F0E6FF"/>
+  <!-- 眼睛 -->
+  <circle cx="70" cy="72" r="10" fill="#00F5D4"/>
+  <circle cx="100" cy="72" r="10" fill="#00F5D4"/>
+  <circle cx="73" cy="70" r="4" fill="#2D3436"/>
+  <circle cx="103" cy="70" r="4" fill="#2D3436"/>
+  <!-- 天线 -->
+  <line x1="85" y1="45" x2="85" y2="30" stroke="#F0E6FF" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="85" cy="25" r="5" fill="#00F5D4"/>
+  <!-- 身体 -->
+  <rect x="55" y="110" width="60" height="40" rx="10" fill="#F0E6FF"/>
+  <!-- 按钮 -->
+  <circle cx="70" cy="130" r="6" fill="#FF6B6B"/>
+  <circle cx="85" cy="130" r="6" fill="#4ECDC4"/>
+  <circle cx="100" cy="130" r="6" fill="#FFE66D"/>
+  <!-- 手臂 -->
+  <rect x="35" y="115" width="15" height="30" rx="5" fill="#9B5DE5"/>
+  <rect x="120" y="115" width="15" height="30" rx="5" fill="#9B5DE5"/>
+</svg>

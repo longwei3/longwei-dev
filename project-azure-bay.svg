@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00D9FF"/>
+      <stop offset="100%" style="stop-color:#0077B6"/>
+    </linearGradient>
+  </defs>
+  <rect width="170" height="170" rx="30" fill="url(#bg)"/>
+  <!-- 贝壳 -->
+  <ellipse cx="85" cy="95" rx="35" ry="25" fill="#FFEAA7"/>
+  <path d="M60 95 Q60 60 85 50 Q110 60 110 95" fill="#FFD93D" opacity="0.8"/>
+  <!-- 海浪 -->
+  <path d="M30 130 Q55 115 85 130 Q115 145 140 130 L140 150 L30 150 Z" fill="#023E8A" opacity="0.5"/>
+  <path d="M40 140 Q65 125 95 140 Q125 155 150 140 L150 155 L40 155 Z" fill="#0077B6" opacity="0.7"/>
+  <!-- 气泡 -->
+  <circle cx="125" cy="70" r="6" fill="white" opacity="0.5"/>
+  <circle cx="140" cy="55" r="4" fill="white" opacity="0.4"/>
+  <circle cx="115" cy="50" r="3" fill="white" opacity="0.3"/>
+  <!-- 小鱼 -->
+  <ellipse cx="60" cy="115" rx="12" ry="7" fill="#FFD93D"/>
+  <path d="M48 115 L42 110 L42 120 Z" fill="#FFD93D"/>
+  <circle cx="65" cy="113" r="2" fill="#2D3436"/>
+</svg>

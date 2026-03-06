@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>蔚蓝海湾 · 互动经营MVP</title>
+  <style>
+    :root {
+      --bg-top: #07243c;
+      --bg-bottom: #031425;
+      --panel: rgba(8, 30, 47, 0.84);
+      --line: rgba(125, 211, 252, 0.34);
+      --text: #e2f4ff;
+      --muted: #9bc4d6;
+      --mint: #5eead4;
+      --cyan: #7dd3fc;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --bad: #fb7185;
+      --char-main-a: #f97316;
+      --char-main-b: #ec4899;
+      --char-tail-a: #fb7185;
+      --char-tail-b: #be185d;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: "Outfit", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 16% 10%, rgba(125, 211, 252, 0.26), transparent 36%),
+        radial-gradient(circle at 82% 0%, rgba(94, 234, 212, 0.18), transparent 32%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .phone {
+      width: min(100%, 430px);
+      min-height: calc(100vh - 20px);
+      border-radius: 18px;
+      border: 1px solid rgba(125, 211, 252, 0.24);
+      background: rgba(3, 15, 27, 0.7);
+      box-shadow: 0 16px 46px rgba(2, 10, 18, 0.5);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto auto auto 1fr auto auto auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar {
+      padding: 12px;
+      border-bottom: 1px solid rgba(125, 211, 252, 0.16);
+      background: rgba(5, 21, 35, 0.72);
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: 1rem;
+      color: #bfefff;
+      letter-spacing: 0.02em;
+    }
+
+    .links { display: flex; gap: 8px; }
+
+    .pill {
+      text-decoration: none;
+      color: #d8f7ff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 0.74rem;
+      background: rgba(7, 41, 61, 0.75);
+    }
+
+    .resources {
+      border-bottom: 1px solid rgba(125, 211, 252, 0.12);
+      background: rgba(4, 18, 30, 0.74);
+      padding: 8px 10px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      align-items: stretch;
+    }
+
+    .res-item {
+      border: 1px solid rgba(125, 211, 252, 0.18);
+      border-radius: 10px;
+      padding: 6px;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      background: rgba(8, 30, 47, 0.62);
+    }
+
+    .res-item strong {
+      display: block;
+      margin-top: 1px;
+      font-size: 0.88rem;
+      color: #d8f5ff;
+    }
+
+    .char-tabs {
+      border-bottom: 1px solid rgba(125, 211, 252, 0.14);
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 9px 10px;
+      background: rgba(6, 23, 38, 0.74);
+    }
+
+    .char-btn {
+      border: 1px solid rgba(148, 163, 184, 0.34);
+      border-radius: 999px;
+      padding: 6px 10px;
+      white-space: nowrap;
+      background: rgba(9, 24, 38, 0.72);
+      color: #d8f0ff;
+      font-size: 0.74rem;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .char-btn.active {
+      border-color: rgba(125, 211, 252, 0.72);
+      background: rgba(9, 39, 60, 0.84);
+      box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.3);
+    }
+
+    .stats {
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      border-bottom: 1px solid rgba(125, 211, 252, 0.14);
+      background: rgba(4, 19, 31, 0.7);
+    }
+
+    .name {
+      font-size: 0.9rem;
+      color: #d4f4ff;
+      margin-bottom: 5px;
+    }
+
+    .desc {
+      font-size: 0.72rem;
+      color: #8fb8ca;
+      margin-bottom: 6px;
+    }
+
+    .level-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 211, 252, 0.2);
+      background: rgba(2, 10, 18, 0.6);
+      overflow: hidden;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22d3ee, #34d399);
+      transition: width 0.25s ease;
+    }
+
+    .mood-box {
+      min-width: 112px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 8px;
+      font-size: 0.74rem;
+      background: rgba(7, 31, 47, 0.76);
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    .mood-val {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #d5f7ff;
+    }
+
+    .mood-state {
+      display: inline-block;
+      margin-top: 4px;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.72rem;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+    }
+
+    .mood-state.good { color: var(--good); border-color: rgba(52, 211, 153, 0.45); }
+    .mood-state.mid { color: var(--warn); border-color: rgba(251, 191, 36, 0.45); }
+    .mood-state.bad { color: var(--bad); border-color: rgba(251, 113, 133, 0.5); }
+
+    .stage {
+      position: relative;
+      margin: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(125, 211, 252, 0.24);
+      min-height: 300px;
+      background:
+        radial-gradient(circle at 15% 8%, rgba(125, 211, 252, 0.25), transparent 32%),
+        linear-gradient(180deg, #0a4f73 0%, #0a3960 45%, #05253d 76%, #04182c 100%);
+      overflow: hidden;
+    }
+
+    .dialog {
+      position: absolute;
+      left: 50%;
+      top: 14px;
+      transform: translateX(-50%);
+      max-width: 85%;
+      font-size: 0.78rem;
+      border-radius: 10px;
+      border: 1px solid rgba(125, 211, 252, 0.42);
+      padding: 7px 10px;
+      background: rgba(4, 24, 39, 0.78);
+      text-align: center;
+      z-index: 20;
+    }
+
+    .live2d {
+      position: absolute;
+      left: 50%;
+      bottom: 14px;
+      width: 190px;
+      height: 240px;
+      transform: translateX(-50%);
+      transform-origin: 50% 88%;
+      z-index: 8;
+      transition: 0.2s ease;
+      animation: float 4.5s ease-in-out infinite;
+    }
+
+    .live2d.char-xi {
+      --char-main-a: #f97316;
+      --char-main-b: #ec4899;
+      --char-tail-a: #fb7185;
+      --char-tail-b: #be185d;
+    }
+
+    .live2d.char-ning {
+      --char-main-a: #22c55e;
+      --char-main-b: #14b8a6;
+      --char-tail-a: #2dd4bf;
+      --char-tail-b: #0f766e;
+    }
+
+    .live2d.happy { animation-duration: 3.2s; }
+    .live2d.tired { filter: saturate(0.88); opacity: 0.95; }
+    .live2d.angry { animation-duration: 2.6s; }
+
+    .shadow {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 0;
+      height: 20px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 50% 50%, rgba(2, 6, 23, 0.56), rgba(2, 6, 23, 0));
+    }
+
+    .body {
+      position: absolute;
+      left: 36px;
+      right: 36px;
+      top: 54px;
+      bottom: 56px;
+      border-radius: 44% 44% 42% 42%;
+      background: linear-gradient(170deg, var(--char-main-a) 0%, var(--char-main-b) 100%);
+      box-shadow: inset -8px -12px 18px rgba(2, 6, 23, 0.24), inset 5px 8px 16px rgba(255, 255, 255, 0.24);
+    }
+
+    .tail {
+      position: absolute;
+      left: 78px;
+      right: 78px;
+      bottom: 22px;
+      height: 46px;
+      border-radius: 42% 42% 58% 58%;
+      background: linear-gradient(180deg, var(--char-tail-a) 0%, var(--char-tail-b) 100%);
+    }
+
+    .face {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      top: 82px;
+      height: 90px;
+      border-radius: 38px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .eye {
+      position: absolute;
+      top: 34px;
+      width: 16px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      animation: blink 4.8s ease-in-out infinite;
+    }
+
+    .eye::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #0f172a;
+    }
+
+    .eye.left { left: 18px; }
+    .eye.right { right: 18px; }
+
+    .mouth {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      width: 30px;
+      height: 14px;
+      transform: translateX(-50%);
+      border-bottom: 3px solid rgba(15, 23, 42, 0.78);
+      border-radius: 0 0 18px 18px;
+    }
+
+    .live2d.tired .eye { transform: scaleY(0.3); }
+
+    .live2d.angry .mouth {
+      width: 24px;
+      border-bottom: none;
+      border-top: 3px solid rgba(15, 23, 42, 0.8);
+      border-radius: 16px 16px 0 0;
+      top: 56px;
+      bottom: auto;
+    }
+
+    .touch-zone {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px dashed rgba(125, 211, 252, 0.55);
+      background: rgba(125, 211, 252, 0.1);
+      color: #d6f5ff;
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 18;
+      transition: 0.16s ease;
+    }
+
+    .touch-zone:active {
+      transform: scale(0.95);
+      background: rgba(125, 211, 252, 0.2);
+    }
+
+    #zoneHead { width: 70px; height: 70px; left: 50%; top: 76px; transform: translateX(-50%); }
+    #zoneHand { width: 72px; height: 72px; left: 62%; top: 182px; }
+    #zoneShoulder { width: 76px; height: 76px; left: 28%; top: 170px; }
+
+    .actions {
+      margin: 0 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .panel {
+      border: 1px solid rgba(125, 211, 252, 0.18);
+      border-radius: 12px;
+      background: var(--panel);
+      padding: 9px;
+    }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 0.8rem;
+      color: #bfefff;
+    }
+
+    .controls {
+      display: grid;
+      gap: 6px;
+    }
+
+    select, button {
+      border-radius: 9px;
+      border: 1px solid rgba(148, 163, 184, 0.34);
+      background: rgba(9, 24, 38, 0.72);
+      color: #e0f4ff;
+      font-size: 0.76rem;
+      padding: 7px 8px;
+    }
+
+    button {
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    button:hover {
+      border-color: rgba(125, 211, 252, 0.56);
+      background: rgba(9, 34, 54, 0.8);
+    }
+
+    .minor {
+      font-size: 0.68rem;
+      color: #93bfd3;
+      line-height: 1.3;
+    }
+
+    .mgmt {
+      margin: 8px 10px;
+      border: 1px solid rgba(125, 211, 252, 0.18);
+      border-radius: 12px;
+      background: var(--panel);
+      padding: 9px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .mgmt-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mgmt-head h2 {
+      margin: 0;
+      font-size: 0.82rem;
+      color: #bfefff;
+    }
+
+    .collect-all {
+      font-size: 0.72rem;
+      padding: 6px 8px;
+    }
+
+    .build-card {
+      border: 1px solid rgba(125, 211, 252, 0.18);
+      border-radius: 10px;
+      padding: 7px;
+      background: rgba(6, 26, 41, 0.7);
+      display: grid;
+      gap: 6px;
+    }
+
+    .build-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.76rem;
+    }
+
+    .build-name {
+      color: #ddf8ff;
+      font-weight: 600;
+    }
+
+    .build-rate {
+      color: #98c8da;
+      font-size: 0.7rem;
+    }
+
+    .build-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .build-buttons button {
+      flex: 1;
+      font-size: 0.72rem;
+      padding: 6px 7px;
+    }
+
+    .log {
+      margin: 0 10px 10px;
+      border: 1px solid rgba(125, 211, 252, 0.16);
+      border-radius: 12px;
+      background: rgba(5, 21, 35, 0.72);
+      padding: 9px;
+      min-height: 110px;
+      max-height: 180px;
+      overflow: auto;
+    }
+
+    .log h2 {
+      margin: 0 0 6px;
+      font-size: 0.8rem;
+      color: #bfefff;
+    }
+
+    .log ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 5px;
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 9px 10px 10px;
+      border-top: 1px solid rgba(125, 211, 252, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.72rem;
+      color: #97c3d7;
+      background: rgba(4, 18, 30, 0.76);
+    }
+
+    .danger {
+      border-color: rgba(251, 113, 133, 0.5);
+      color: #ffc1d2;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      border-radius: 10px;
+      padding: 8px 10px;
+      border: 1px solid rgba(125, 211, 252, 0.42);
+      background: rgba(4, 23, 38, 0.88);
+      color: #d5f3ff;
+      font-size: 0.78rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+      z-index: 999;
+      white-space: nowrap;
+    }
+
+    .toast.show { opacity: 1; }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0) rotate(-1deg); }
+      50% { transform: translateX(-50%) translateY(-8px) rotate(1.1deg); }
+    }
+
+    @keyframes blink {
+      0%, 46%, 52%, 100% { transform: scaleY(1); }
+      48%, 50% { transform: scaleY(0.16); }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <section class="topbar">
+      <div class="title">
+        <h1>蔚蓝海湾 · 互动经营MVP（Sprint 0/1）</h1>
+        <div class="links">
+          <a class="pill" href="/azure-bay-live2d/index.html">采珠版</a>
+          <a class="pill" href="/">主页</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="resources">
+      <div class="res-item">贝壳<strong id="resShell">0</strong></div>
+      <div class="res-item">海星<strong id="resStar">0</strong></div>
+      <div class="res-item">木材<strong id="resWood">0</strong></div>
+      <div class="res-item">鱼获<strong id="resFish">0</strong></div>
+    </section>
+
+    <section class="char-tabs" id="characterTabs"></section>
+
+    <section class="stats">
+      <div>
+        <div class="name" id="charName">角色：汐</div>
+        <div class="desc" id="charDesc">温柔治愈，喜欢安静的海风与手工礼物。</div>
+        <div class="level-row">
+          <span>好感 Lv.<strong id="levelText">1</strong></span>
+          <span><strong id="expText">0</strong>/<span id="needText">0</span></span>
+        </div>
+        <div class="bar"><span id="expBar"></span></div>
+      </div>
+      <div class="mood-box">
+        心情值
+        <div class="mood-val" id="moodVal">65</div>
+        <span class="mood-state mid" id="moodState">平静</span>
+      </div>
+    </section>
+
+    <section class="stage">
+      <div class="dialog" id="dialog">欢迎回来，今天也一起看看海吧。</div>
+
+      <div class="live2d char-xi" id="avatar">
+        <div class="shadow"></div>
+        <div class="tail"></div>
+        <div class="body"></div>
+        <div class="face">
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="mouth"></div>
+        </div>
+      </div>
+
+      <button class="touch-zone" id="zoneHead" type="button">摸头</button>
+      <button class="touch-zone" id="zoneHand" type="button">牵手</button>
+      <button class="touch-zone" id="zoneShoulder" type="button">拍肩</button>
+    </section>
+
+    <section class="actions">
+      <div class="panel">
+        <h2>送礼</h2>
+        <div class="controls">
+          <select id="giftSelect"></select>
+          <button id="giftBtn" type="button">送出礼物</button>
+          <div class="minor" id="giftHint">偏好礼物会额外提升好感</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>日程互动</h2>
+        <div class="controls" id="scheduleControls"></div>
+      </div>
+    </section>
+
+    <section class="mgmt">
+      <div class="mgmt-head">
+        <h2>海岛经营</h2>
+        <button class="collect-all" type="button" id="collectAllBtn">一键收取</button>
+      </div>
+      <div class="build-card">
+        <div class="build-top">
+          <div>
+            <div class="build-name">果园 <span id="orchardLevel">Lv.1</span></div>
+            <div class="build-rate" id="orchardRate">产出中...</div>
+          </div>
+          <div class="build-rate" id="orchardStored">待收 0</div>
+        </div>
+        <div class="build-buttons">
+          <button type="button" id="orchardCollectBtn">收取</button>
+          <button type="button" id="orchardUpgradeBtn">升级</button>
+        </div>
+      </div>
+      <div class="build-card">
+        <div class="build-top">
+          <div>
+            <div class="build-name">渔场 <span id="fisheryLevel">Lv.1</span></div>
+            <div class="build-rate" id="fisheryRate">产出中...</div>
+          </div>
+          <div class="build-rate" id="fisheryStored">待收 0</div>
+        </div>
+        <div class="build-buttons">
+          <button type="button" id="fisheryCollectBtn">收取</button>
+          <button type="button" id="fisheryUpgradeBtn">升级</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="log">
+      <h2>互动记录</h2>
+      <ul id="logList"></ul>
+    </section>
+
+    <section class="footer">
+      <span id="saveHint">本地自动存档已开启</span>
+      <button class="danger" id="resetBtn" type="button">重置存档</button>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (function () {
+      const KEY = "azure-bay-interaction-mvp-v2";
+      const SAVE_INTERVAL_MS = 8000;
+      const PROD_TICK_MS = 5000;
+      const MOOD_TICK_MS = 30000;
+      const OFFLINE_CAP_HOURS = 8;
+      const MAX_BUILDING_LEVEL = 5;
+
+      const CHARACTERS = {
+        xi: {
+          id: "xi",
+          name: "汐",
+          role: "温柔治愈，喜欢安静的海风与手工礼物。",
+          avatarClass: "char-xi",
+          favoriteGift: "shell_necklace",
+          lines: {
+            welcome: "欢迎回来，今天也一起看看海吧。",
+            head: "嗯...很安心。",
+            hand: "海风有点凉，不过你在就好。",
+            shoulder: "我会打起精神继续努力。",
+            moodLow: "你能再陪我一会吗？",
+            levelUp: "我会一直记得你对我的温柔。"
+          }
+        },
+        ning: {
+          id: "ning",
+          name: "柠",
+          role: "元气开朗，喜欢甜品和热闹的互动。",
+          avatarClass: "char-ning",
+          favoriteGift: "jam_tart",
+          lines: {
+            welcome: "嘿！今天要不要一起做点有趣的事？",
+            head: "嘿嘿，这样会让我更有干劲。",
+            hand: "一起冲向下一站吧！",
+            shoulder: "收到，立刻进入状态。",
+            moodLow: "我有点无聊了，快来互动！",
+            levelUp: "太棒了！我们配合越来越好了。"
+          }
+        }
+      };
+
+      const GIFTS = {
+        shell_necklace: {
+          label: "贝壳项链",
+          baseExp: 26,
+          mood: 8,
+          cost: { shell: 30, wood: 2 },
+          line: "这份礼物很精致，我很喜欢。"
+        },
+        jam_tart: {
+          label: "果酱塔",
+          baseExp: 24,
+          mood: 7,
+          cost: { shell: 24, fish: 2 },
+          line: "甜甜的，像今天的海风。"
+        },
+        story_book: {
+          label: "海湾故事集",
+          baseExp: 18,
+          mood: 5,
+          cost: { shell: 18, wood: 4 },
+          line: "今晚我想把这本书读给你听。"
+        }
+      };
+
+      const SCHEDULES = {
+        meal: { label: "一起吃饭", exp: 18, mood: 14, line: "这一顿吃得很满足。" },
+        walk: { label: "海边散步", exp: 16, mood: 12, line: "脚下的沙很软，心情也变轻了。" },
+        read: { label: "安静看书", exp: 15, mood: 10, line: "一起安静下来，也是一种默契。" },
+        star: { label: "夜间观星", exp: 22, mood: 18, line: "今晚的星星，比昨天更近。" }
+      };
+
+      const BUILDINGS = {
+        orchard: {
+          name: "果园",
+          production: (level) => ({ shell: 24 + (level - 1) * 12, wood: 2 + (level - 1) * 0.8 }),
+          upgradeCost: (level) => ({ shell: 120 * level, wood: 14 * level })
+        },
+        fishery: {
+          name: "渔场",
+          production: (level) => ({ shell: 18 + (level - 1) * 10, fish: 3 + (level - 1) * 1.2 }),
+          upgradeCost: (level) => ({ shell: 140 * level, fish: 8 * level })
+        }
+      };
+
+      const el = {
+        characterTabs: document.getElementById("characterTabs"),
+        charName: document.getElementById("charName"),
+        charDesc: document.getElementById("charDesc"),
+        avatar: document.getElementById("avatar"),
+        dialog: document.getElementById("dialog"),
+        levelText: document.getElementById("levelText"),
+        expText: document.getElementById("expText"),
+        needText: document.getElementById("needText"),
+        expBar: document.getElementById("expBar"),
+        moodVal: document.getElementById("moodVal"),
+        moodState: document.getElementById("moodState"),
+        giftSelect: document.getElementById("giftSelect"),
+        giftBtn: document.getElementById("giftBtn"),
+        giftHint: document.getElementById("giftHint"),
+        scheduleControls: document.getElementById("scheduleControls"),
+        logList: document.getElementById("logList"),
+        saveHint: document.getElementById("saveHint"),
+        resetBtn: document.getElementById("resetBtn"),
+        toast: document.getElementById("toast"),
+        zoneHead: document.getElementById("zoneHead"),
+        zoneHand: document.getElementById("zoneHand"),
+        zoneShoulder: document.getElementById("zoneShoulder"),
+        resShell: document.getElementById("resShell"),
+        resStar: document.getElementById("resStar"),
+        resWood: document.getElementById("resWood"),
+        resFish: document.getElementById("resFish"),
+        orchardLevel: document.getElementById("orchardLevel"),
+        orchardRate: document.getElementById("orchardRate"),
+        orchardStored: document.getElementById("orchardStored"),
+        orchardCollectBtn: document.getElementById("orchardCollectBtn"),
+        orchardUpgradeBtn: document.getElementById("orchardUpgradeBtn"),
+        fisheryLevel: document.getElementById("fisheryLevel"),
+        fisheryRate: document.getElementById("fisheryRate"),
+        fisheryStored: document.getElementById("fisheryStored"),
+        fisheryCollectBtn: document.getElementById("fisheryCollectBtn"),
+        fisheryUpgradeBtn: document.getElementById("fisheryUpgradeBtn"),
+        collectAllBtn: document.getElementById("collectAllBtn")
+      };
+
+      function now() {
+        return Date.now();
+      }
+
+      function expNeed(level) {
+        return 80 + level * 35;
+      }
+
+      function clamp(v, min, max) {
+        return Math.max(min, Math.min(max, v));
+      }
+
+      function round1(v) {
+        return Math.round(v * 10) / 10;
+      }
+
+      function moodDescriptor(v) {
+        if (v >= 80) return { text: "开心", cls: "good", avatar: "happy" };
+        if (v >= 45) return { text: "平静", cls: "mid", avatar: "" };
+        if (v >= 25) return { text: "疲惫", cls: "mid", avatar: "tired" };
+        return { text: "生气", cls: "bad", avatar: "angry" };
+      }
+
+      function defaultCharacterState() {
+        return {
+          level: 1,
+          exp: 0,
+          mood: 65,
+          cooldowns: {},
+          lastInteractAt: now(),
+          logs: ["欢迎来到蔚蓝海湾，先试试摸头互动。"]
+        };
+      }
+
+      function defaultState() {
+        return {
+          version: 2,
+          activeCharacterId: "xi",
+          resources: { shell: 220, star: 5, wood: 30, fish: 12 },
+          buildings: {
+            orchard: { level: 1, stored: { shell: 0, wood: 0 } },
+            fishery: { level: 1, stored: { shell: 0, fish: 0 } }
+          },
+          characters: {
+            xi: defaultCharacterState(),
+            ning: defaultCharacterState()
+          },
+          lastSaveAt: now(),
+          lastTickAt: now()
+        };
+      }
+
+      function migrateFromV1(parsed) {
+        const next = defaultState();
+        if (!parsed || typeof parsed !== "object") return next;
+        next.characters.xi.level = Number(parsed.level || 1);
+        next.characters.xi.exp = Number(parsed.exp || 0);
+        next.characters.xi.mood = Number(parsed.mood || 65);
+        next.characters.xi.logs = Array.isArray(parsed.logs) && parsed.logs.length ? parsed.logs.slice(-8) : next.characters.xi.logs;
+        next.characters.xi.lastInteractAt = Number(parsed.lastInteractAt || now());
+        next.lastTickAt = Number(parsed.lastTickAt || now());
+        return next;
+      }
+
+      function loadState() {
+        try {
+          const rawV2 = localStorage.getItem(KEY);
+          if (rawV2) {
+            const parsed = JSON.parse(rawV2);
+            const next = defaultState();
+            if (parsed.version === 2) {
+              next.activeCharacterId = parsed.activeCharacterId || "xi";
+              next.resources = { ...next.resources, ...(parsed.resources || {}) };
+              next.buildings = { ...next.buildings, ...(parsed.buildings || {}) };
+              next.characters = { ...next.characters, ...(parsed.characters || {}) };
+              next.lastTickAt = Number(parsed.lastTickAt || now());
+              next.lastSaveAt = Number(parsed.lastSaveAt || now());
+              return next;
+            }
+          }
+
+          const old = localStorage.getItem("azure-bay-interaction-mvp-v1");
+          if (old) {
+            return migrateFromV1(JSON.parse(old));
+          }
+        } catch (err) {
+          return defaultState();
+        }
+        return defaultState();
+      }
+
+      const state = loadState();
+
+      function getChar(id) {
+        return CHARACTERS[id];
+      }
+
+      function getCharState(id) {
+        if (!state.characters[id]) {
+          state.characters[id] = defaultCharacterState();
+        }
+        return state.characters[id];
+      }
+
+      function activeChar() {
+        return getChar(state.activeCharacterId);
+      }
+
+      function activeCharState() {
+        return getCharState(state.activeCharacterId);
+      }
+
+      function toast(message) {
+        el.toast.textContent = message;
+        el.toast.classList.add("show");
+        clearTimeout(toast._id);
+        toast._id = setTimeout(() => el.toast.classList.remove("show"), 1200);
+      }
+
+      function setDialog(text) {
+        el.dialog.textContent = text;
+      }
+
+      function pushLog(charId, text) {
+        const cs = getCharState(charId);
+        const time = new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
+        cs.logs = cs.logs || [];
+        cs.logs.push("[" + time + "] " + text);
+        if (cs.logs.length > 12) cs.logs = cs.logs.slice(-12);
+      }
+
+      function hasResource(cost) {
+        return Object.keys(cost).every((k) => Number(state.resources[k] || 0) >= Number(cost[k]));
+      }
+
+      function payResource(cost) {
+        Object.keys(cost).forEach((k) => {
+          state.resources[k] = Number(state.resources[k] || 0) - Number(cost[k]);
+        });
+      }
+
+      function gainResource(delta) {
+        Object.keys(delta).forEach((k) => {
+          state.resources[k] = Number(state.resources[k] || 0) + Number(delta[k]);
+        });
+      }
+
+      function gainExp(charId, amount, reason) {
+        const cs = getCharState(charId);
+        let exp = Number(cs.exp || 0) + amount;
+        let level = Number(cs.level || 1);
+        let leveled = false;
+
+        while (exp >= expNeed(level)) {
+          exp -= expNeed(level);
+          level += 1;
+          leveled = true;
+        }
+
+        cs.exp = exp;
+        cs.level = level;
+        pushLog(charId, reason + "，好感 +" + amount);
+        if (leveled) {
+          pushLog(charId, "好感提升到 Lv." + level);
+          if (charId === state.activeCharacterId) {
+            setDialog(getChar(charId).lines.levelUp);
+            toast("好感升级 Lv." + level);
+          }
+        }
+      }
+
+      function addMood(charId, amount, reason) {
+        const cs = getCharState(charId);
+        cs.mood = clamp(Number(cs.mood || 65) + amount, 0, 100);
+        if (amount !== 0) {
+          pushLog(charId, reason + "，心情 " + (amount > 0 ? "+" : "") + amount);
+        }
+      }
+
+      function inCooldown(charId, key, ms) {
+        const cs = getCharState(charId);
+        const nowTs = now();
+        const until = Number((cs.cooldowns || {})[key] || 0);
+        if (until > nowTs) {
+          const left = Math.max(1, Math.ceil((until - nowTs) / 1000));
+          toast("冷却中 " + left + " 秒");
+          return true;
+        }
+        cs.cooldowns = cs.cooldowns || {};
+        cs.cooldowns[key] = nowTs + ms;
+        return false;
+      }
+
+      function interact(type) {
+        const char = activeChar();
+        const cs = activeCharState();
+        if (type === "head") {
+          if (inCooldown(char.id, "head", 14000)) return;
+          gainExp(char.id, 8, "摸头");
+          addMood(char.id, 4, "摸头");
+          setDialog(char.lines.head);
+        } else if (type === "hand") {
+          if (inCooldown(char.id, "hand", 26000)) return;
+          gainExp(char.id, 12, "牵手");
+          addMood(char.id, 5, "牵手");
+          setDialog(char.lines.hand);
+        } else if (type === "shoulder") {
+          if (inCooldown(char.id, "shoulder", 18000)) return;
+          gainExp(char.id, 6, "拍肩");
+          addMood(char.id, 2, "拍肩");
+          setDialog(char.lines.shoulder);
+        }
+        cs.lastInteractAt = now();
+        updateUI();
+      }
+
+      function sendGift() {
+        const giftId = el.giftSelect.value;
+        const gift = GIFTS[giftId];
+        if (!gift) return;
+        if (inCooldown(state.activeCharacterId, "gift", 45000)) return;
+        if (!hasResource(gift.cost)) {
+          toast("资源不足，无法送礼");
+          return;
+        }
+        payResource(gift.cost);
+        const char = activeChar();
+        const bonus = char.favoriteGift === giftId ? 1.5 : 1.0;
+        const expGain = Math.round(gift.baseExp * bonus);
+        gainExp(char.id, expGain, "送礼：" + gift.label);
+        addMood(char.id, gift.mood + (bonus > 1 ? 2 : 0), "收到礼物");
+        setDialog(gift.line);
+        getCharState(char.id).lastInteractAt = now();
+        pushLog(char.id, bonus > 1 ? "命中偏好礼物，好感额外提升" : "普通礼物已送达");
+        toast("送礼成功");
+        updateUI();
+      }
+
+      function scheduleAction(id) {
+        const cfg = SCHEDULES[id];
+        if (!cfg) return;
+        if (inCooldown(state.activeCharacterId, "schedule", 120000)) return;
+        const char = activeChar();
+        gainExp(char.id, cfg.exp, "日程：" + cfg.label);
+        addMood(char.id, cfg.mood, "完成日程");
+        setDialog(cfg.line);
+        getCharState(char.id).lastInteractAt = now();
+        toast("日程完成");
+        updateUI();
+      }
+
+      function updateProduction(targetTime, isOffline) {
+        const last = Number(state.lastTickAt || targetTime);
+        if (targetTime <= last) return;
+        let hours = (targetTime - last) / 3600000;
+        if (isOffline) hours = Math.min(hours, OFFLINE_CAP_HOURS);
+        if (hours <= 0) {
+          state.lastTickAt = targetTime;
+          return;
+        }
+
+        Object.keys(BUILDINGS).forEach((id) => {
+          const cfg = BUILDINGS[id];
+          const b = state.buildings[id];
+          const rates = cfg.production(b.level);
+          Object.keys(rates).forEach((res) => {
+            b.stored[res] = round1(Number(b.stored[res] || 0) + rates[res] * hours);
+          });
+        });
+
+        state.lastTickAt = targetTime;
+      }
+
+      function collectBuilding(id) {
+        const b = state.buildings[id];
+        if (!b) return 0;
+        const gain = {};
+        let total = 0;
+        Object.keys(b.stored).forEach((k) => {
+          const amount = Math.floor(Number(b.stored[k] || 0));
+          if (amount > 0) {
+            gain[k] = amount;
+            b.stored[k] = round1(Number(b.stored[k]) - amount);
+            total += amount;
+          }
+        });
+        if (total > 0) {
+          gainResource(gain);
+        }
+        return total;
+      }
+
+      function collectAll() {
+        let total = 0;
+        total += collectBuilding("orchard");
+        total += collectBuilding("fishery");
+        if (total > 0) {
+          toast("已收取资源 +" + total);
+          pushLog(state.activeCharacterId, "完成一键收取，资源 +" + total);
+        } else {
+          toast("当前没有可收取资源");
+        }
+        updateUI();
+      }
+
+      function upgradeBuilding(id) {
+        const b = state.buildings[id];
+        const cfg = BUILDINGS[id];
+        if (!b || !cfg) return;
+        if (b.level >= MAX_BUILDING_LEVEL) {
+          toast("已达最高等级");
+          return;
+        }
+        const cost = cfg.upgradeCost(b.level);
+        if (!hasResource(cost)) {
+          toast("资源不足，无法升级");
+          return;
+        }
+        payResource(cost);
+        b.level += 1;
+        pushLog(state.activeCharacterId, cfg.name + " 升级到 Lv." + b.level);
+        toast(cfg.name + " 升级成功");
+        updateUI();
+      }
+
+      function switchCharacter(charId) {
+        if (!CHARACTERS[charId]) return;
+        state.activeCharacterId = charId;
+        const char = activeChar();
+        setDialog(char.lines.welcome);
+        updateUI();
+      }
+
+      function applyMoodDecay() {
+        const nowTs = now();
+        Object.keys(CHARACTERS).forEach((id) => {
+          const cs = getCharState(id);
+          const inactiveMs = nowTs - Number(cs.lastInteractAt || nowTs);
+          if (inactiveMs >= 120000) {
+            cs.mood = clamp(Number(cs.mood || 65) - 1, 0, 100);
+            pushLog(id, "你离开了一会，心情 -1");
+            if (id === state.activeCharacterId && cs.mood <= 25) {
+              setDialog(getChar(id).lines.moodLow);
+            }
+          }
+        });
+      }
+
+      function updateCharacterTabs() {
+        el.characterTabs.innerHTML = "";
+        Object.keys(CHARACTERS).forEach((id) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "char-btn" + (id === state.activeCharacterId ? " active" : "");
+          const cs = getCharState(id);
+          btn.textContent = CHARACTERS[id].name + "  Lv." + cs.level;
+          btn.addEventListener("click", () => switchCharacter(id));
+          el.characterTabs.appendChild(btn);
+        });
+      }
+
+      function updateGiftOptions() {
+        const char = activeChar();
+        const current = el.giftSelect.value;
+        el.giftSelect.innerHTML = "";
+        Object.keys(GIFTS).forEach((id) => {
+          const gift = GIFTS[id];
+          const costText = Object.keys(gift.cost).map((k) => {
+            const label = k === "shell" ? "贝壳" : (k === "wood" ? "木材" : (k === "fish" ? "鱼获" : "海星"));
+            return label + gift.cost[k];
+          }).join(" + ");
+          const option = document.createElement("option");
+          option.value = id;
+          option.textContent = gift.label + "（" + costText + "）";
+          if (id === current) option.selected = true;
+          el.giftSelect.appendChild(option);
+        });
+        const fav = GIFTS[char.favoriteGift].label;
+        el.giftHint.textContent = "当前偏好礼物：" + fav + "（好感x1.5）";
+      }
+
+      function updateScheduleButtons() {
+        el.scheduleControls.innerHTML = "";
+        Object.keys(SCHEDULES).forEach((id) => {
+          const cfg = SCHEDULES[id];
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = cfg.label;
+          btn.addEventListener("click", () => scheduleAction(id));
+          el.scheduleControls.appendChild(btn);
+        });
+      }
+
+      function updateBuildingUI() {
+        const orchard = state.buildings.orchard;
+        const fishery = state.buildings.fishery;
+        const orchardRate = BUILDINGS.orchard.production(orchard.level);
+        const fisheryRate = BUILDINGS.fishery.production(fishery.level);
+
+        el.orchardLevel.textContent = "Lv." + orchard.level;
+        el.orchardRate.textContent = "每小时：贝壳 " + orchardRate.shell + " / 木材 " + round1(orchardRate.wood);
+        el.orchardStored.textContent = "待收 贝壳 " + Math.floor(orchard.stored.shell || 0) + " / 木材 " + Math.floor(orchard.stored.wood || 0);
+
+        el.fisheryLevel.textContent = "Lv." + fishery.level;
+        el.fisheryRate.textContent = "每小时：贝壳 " + fisheryRate.shell + " / 鱼获 " + round1(fisheryRate.fish);
+        el.fisheryStored.textContent = "待收 贝壳 " + Math.floor(fishery.stored.shell || 0) + " / 鱼获 " + Math.floor(fishery.stored.fish || 0);
+
+        const orchardCost = BUILDINGS.orchard.upgradeCost(orchard.level);
+        const fisheryCost = BUILDINGS.fishery.upgradeCost(fishery.level);
+        el.orchardUpgradeBtn.textContent = orchard.level >= MAX_BUILDING_LEVEL ? "已满级" : ("升级（贝壳" + orchardCost.shell + " 木材" + orchardCost.wood + "）");
+        el.fisheryUpgradeBtn.textContent = fishery.level >= MAX_BUILDING_LEVEL ? "已满级" : ("升级（贝壳" + fisheryCost.shell + " 鱼获" + fisheryCost.fish + "）");
+      }
+
+      function updateResourcesUI() {
+        el.resShell.textContent = String(Math.floor(state.resources.shell || 0));
+        el.resStar.textContent = String(Math.floor(state.resources.star || 0));
+        el.resWood.textContent = String(Math.floor(state.resources.wood || 0));
+        el.resFish.textContent = String(Math.floor(state.resources.fish || 0));
+      }
+
+      function updateCharacterPanelUI() {
+        const char = activeChar();
+        const cs = activeCharState();
+        const need = expNeed(cs.level);
+        const pct = clamp((cs.exp / need) * 100, 0, 100);
+        const mood = moodDescriptor(cs.mood);
+
+        el.charName.textContent = "角色：" + char.name;
+        el.charDesc.textContent = char.role;
+        el.levelText.textContent = String(cs.level);
+        el.expText.textContent = String(Math.floor(cs.exp));
+        el.needText.textContent = String(need);
+        el.expBar.style.width = pct.toFixed(1) + "%";
+
+        el.moodVal.textContent = String(Math.floor(cs.mood));
+        el.moodState.textContent = mood.text;
+        el.moodState.className = "mood-state " + mood.cls;
+
+        el.avatar.classList.remove("char-xi", "char-ning", "happy", "tired", "angry");
+        el.avatar.classList.add(char.avatarClass);
+        if (mood.avatar) el.avatar.classList.add(mood.avatar);
+      }
+
+      function updateLogs() {
+        const cs = activeCharState();
+        const lines = (cs.logs || []).slice().reverse();
+        el.logList.innerHTML = "";
+        if (!lines.length) {
+          const li = document.createElement("li");
+          li.textContent = "暂无互动记录。";
+          el.logList.appendChild(li);
+          return;
+        }
+        lines.forEach((line) => {
+          const li = document.createElement("li");
+          li.textContent = line;
+          el.logList.appendChild(li);
+        });
+      }
+
+      function updateUI() {
+        updateCharacterTabs();
+        updateGiftOptions();
+        updateResourcesUI();
+        updateCharacterPanelUI();
+        updateBuildingUI();
+        updateLogs();
+      }
+
+      function saveState(reason) {
+        state.lastSaveAt = now();
+        localStorage.setItem(KEY, JSON.stringify(state));
+        el.saveHint.textContent = "已保存（" + reason + "）";
+      }
+
+      function resetState() {
+        localStorage.removeItem(KEY);
+        const next = defaultState();
+        Object.keys(next).forEach((k) => state[k] = next[k]);
+        setDialog(activeChar().lines.welcome);
+        updateUI();
+        saveState("重置");
+        toast("存档已重置");
+      }
+
+      function init() {
+        updateScheduleButtons();
+
+        const nowTs = now();
+        const lastTick = Number(state.lastTickAt || nowTs);
+        if (lastTick < nowTs) {
+          const diffMin = Math.floor((nowTs - lastTick) / 60000);
+          updateProduction(nowTs, true);
+          if (diffMin > 0) {
+            pushLog(state.activeCharacterId, "离线 " + diffMin + " 分钟，产出已补算");
+          }
+        }
+
+        setDialog(activeChar().lines.welcome);
+        updateUI();
+        saveState("初始化");
+      }
+
+      el.zoneHead.addEventListener("click", () => interact("head"));
+      el.zoneHand.addEventListener("click", () => interact("hand"));
+      el.zoneShoulder.addEventListener("click", () => interact("shoulder"));
+      el.giftBtn.addEventListener("click", sendGift);
+      el.orchardCollectBtn.addEventListener("click", () => {
+        const gain = collectBuilding("orchard");
+        toast(gain > 0 ? "果园收取 +" + gain : "果园暂无可收取");
+        updateUI();
+      });
+      el.fisheryCollectBtn.addEventListener("click", () => {
+        const gain = collectBuilding("fishery");
+        toast(gain > 0 ? "渔场收取 +" + gain : "渔场暂无可收取");
+        updateUI();
+      });
+      el.orchardUpgradeBtn.addEventListener("click", () => upgradeBuilding("orchard"));
+      el.fisheryUpgradeBtn.addEventListener("click", () => upgradeBuilding("fishery"));
+      el.collectAllBtn.addEventListener("click", collectAll);
+      el.resetBtn.addEventListener("click", resetState);
+
+      window.render_game_to_text = function () {
+        const char = activeChar();
+        const cs = activeCharState();
+        return JSON.stringify({
+          mode: "azure_bay_interaction_management_mvp",
+          activeCharacter: char.id,
+          level: cs.level,
+          exp: Math.floor(cs.exp),
+          expNeed: expNeed(cs.level),
+          mood: Math.floor(cs.mood),
+          moodState: moodDescriptor(cs.mood).text,
+          resources: {
+            shell: Math.floor(state.resources.shell),
+            star: Math.floor(state.resources.star),
+            wood: Math.floor(state.resources.wood),
+            fish: Math.floor(state.resources.fish)
+          },
+          buildings: {
+            orchard: { level: state.buildings.orchard.level, storedShell: Math.floor(state.buildings.orchard.stored.shell || 0), storedWood: Math.floor(state.buildings.orchard.stored.wood || 0) },
+            fishery: { level: state.buildings.fishery.level, storedShell: Math.floor(state.buildings.fishery.stored.shell || 0), storedFish: Math.floor(state.buildings.fishery.stored.fish || 0) }
+          },
+          dialog: el.dialog.textContent
+        });
+      };
+
+      window.advanceTime = function (ms) {
+        const delta = Math.max(0, Number(ms) || 0);
+        if (!delta) return;
+        const target = now() + delta;
+        updateProduction(target, true);
+        applyMoodDecay();
+        updateUI();
+      };
+
+      init();
+
+      const saveTimer = setInterval(() => saveState("自动"), SAVE_INTERVAL_MS);
+      const prodTimer = setInterval(() => {
+        updateProduction(now(), false);
+        updateUI();
+      }, PROD_TICK_MS);
+      const moodTimer = setInterval(() => {
+        applyMoodDecay();
+        updateUI();
+      }, MOOD_TICK_MS);
+
+      window.addEventListener("beforeunload", () => {
+        clearInterval(saveTimer);
+        clearInterval(prodTimer);
+        clearInterval(moodTimer);
+        saveState("离开页面");
+      });
+    })();
+  </script>
+</body>
+</html>
