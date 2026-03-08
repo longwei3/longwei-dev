@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>龙伟 | 开发者 & 创业者</title>
     <script>
         (function () {
@@ -13,34 +10,26 @@
             if (pathname === '/mythic-pets' || pathname === '/mythic-pets/') {
                 var entrySearch = window.location.search || '';
                 var entryHash = window.location.hash || '';
-                var entrySeparator = entrySearch ? '&' : '?';
-                var entryBust = '__mp_redirect=' + Date.now();
-                window.location.replace('/mythic-pets/index.html' + entrySearch + entrySeparator + entryBust + entryHash);
+                window.location.replace('/mythic-pets/index.html' + entrySearch + entryHash);
                 return;
             }
             if (pathname.startsWith('/mythic-pets/') && pathname.endsWith('/') && pathname !== '/mythic-pets/') {
                 var target = pathname.replace(/\/+$/, '');
                 var search = window.location.search || '';
                 var hash = window.location.hash || '';
-                var separator = search ? '&' : '?';
-                var bust = '__mp_redirect=' + Date.now();
-                window.location.replace(target + search + separator + bust + hash);
+                window.location.replace(target + search + hash);
             }
             if (pathname === '/azure-bay-live2d' || pathname === '/azure-bay-live2d/') {
                 var azureSearch = window.location.search || '';
                 var azureHash = window.location.hash || '';
-                var azureSeparator = azureSearch ? '&' : '?';
-                var azureBust = '__ab_redirect=' + Date.now();
-                window.location.replace('/azure-bay-live2d/index.html' + azureSearch + azureSeparator + azureBust + azureHash);
+                window.location.replace('/azure-bay-live2d/index.html' + azureSearch + azureHash);
                 return;
             }
             if (pathname.startsWith('/azure-bay-live2d/') && pathname.endsWith('/') && pathname !== '/azure-bay-live2d/') {
                 var azureTarget = pathname.replace(/\/+$/, '');
                 var azureSearch2 = window.location.search || '';
                 var azureHash2 = window.location.hash || '';
-                var azureSeparator2 = azureSearch2 ? '&' : '?';
-                var azureBust2 = '__ab_redirect=' + Date.now();
-                window.location.replace(azureTarget + azureSearch2 + azureSeparator2 + azureBust2 + azureHash2);
+                window.location.replace(azureTarget + azureSearch2 + azureHash2);
             }
         })();
     </script>
@@ -796,7 +785,7 @@
                     <div>
                         <span class="hero-kicker">Builder Mode</span>
                         <h1>你好，我是 <span>龙伟</span><br>开发者 & 创业者</h1>
-                        <p>专注于软件开发、市场营销与 AI Agent 领域，持续做能真正上线和产生结果的产品。</p>
+                        <p>专注于软件开发与 AI Agent 领域，持续做能真正上线和产生结果的产品。</p>
                     </div>
                     <div class="hero-actions">
                         <a href="#contact" class="btn btn-primary">联系我</a>
@@ -805,7 +794,7 @@
                     <p class="hero-site">
                         当前地址：
                         <a href="https://longwei3.github.io/longwei-dev" target="_blank" rel="noopener noreferrer">https://longwei3.github.io/longwei-dev</a><br>
-                        域名可绑定：longwei.org.cn
+                        域名已绑定：longwei.org.cn
                     </p>
                 </div>
                 <aside class="hero-panel">
@@ -863,14 +852,6 @@
                     </div>
                     <h3>移动开发</h3>
                     <p>React Native、Expo</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-top">
-                        <div class="skill-icon"><img src="assets/icons/marketing.svg?v=20260308-3" alt="市场营销图标" loading="lazy"></div>
-                        <span class="skill-badge">增长</span>
-                    </div>
-                    <h3>市场营销</h3>
-                    <p>数字营销、增长策略</p>
                 </div>
                 <div class="skill-card">
                     <div class="skill-top">
@@ -964,6 +945,5 @@
         </div>
         <p>© 2026 龙伟 & 银月. Built with OpenClaw AI Agent</p>
     </footer>
-    <!-- deploy-version: 2026-03-08-1259 -->
 </body>
 </html>
