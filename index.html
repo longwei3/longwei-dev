@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>龙伟 | 开发者 & 创业者</title>
     <script>
         (function () {
             var pathname = window.location.pathname || '';
+            var rootPaths = pathname === '/' || pathname === '/index.html';
+            if (rootPaths) {
+                var params = new URLSearchParams(window.location.search || '');
+                var currentVersion = params.get('v');
+                var expectedVersion = '20260308-1310';
+                if (currentVersion !== expectedVersion) {
+                    params.set('v', expectedVersion);
+                    var next = pathname + '?' + params.toString() + (window.location.hash || '');
+                    window.location.replace(next);
+                    return;
+                }
+            }
             if (pathname === '/mythic-pets' || pathname === '/mythic-pets/') {
                 var entrySearch = window.location.search || '';
                 var entryHash = window.location.hash || '';
