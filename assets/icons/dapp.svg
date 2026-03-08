@@ -1,13 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="g8" x1="16" y1="16" x2="184" y2="184" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#47D4A9"/>
-      <stop offset="1" stop-color="#428EFF"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6C5CE7"/>
+      <stop offset="100%" style="stop-color:#2D3436"/>
     </linearGradient>
   </defs>
-  <rect x="8" y="8" width="184" height="184" rx="42" fill="url(#g8)"/>
-  <circle cx="100" cy="100" r="54" stroke="#EDFFF9" stroke-width="10"/>
-  <path d="M46 100h108" stroke="#EDFFF9" stroke-width="10" stroke-linecap="round"/>
-  <path d="M100 46c18 14 28 33 28 54s-10 40-28 54c-18-14-28-33-28-54s10-40 28-54Z" stroke="#EDFFF9" stroke-width="10" stroke-linejoin="round"/>
-  <circle cx="100" cy="100" r="10" fill="#D7FFF0"/>
+  <rect width="512" height="512" rx="80" fill="url(#bg)"/>
+  <!-- Central node -->
+  <circle cx="256" cy="256" r="50" fill="#F8F9FA" stroke="#6C5CE7" stroke-width="4"/>
+  <!-- Network connections -->
+  <line x1="256" y1="206" x2="256" y2="120" stroke="#A29BFE" stroke-width="4"/>
+  <line x1="296" y1="286" x2="380" y2="320" stroke="#A29BFE" stroke-width="4"/>
+  <line x1="216" y1="286" x2="132" y2="320" stroke="#A29BFE" stroke-width="4"/>
+  <line x1="206" y1="256" x2="120" y2="256" stroke="#A29BFE" stroke-width="4"/>
+  <line x1="306" y1="256" x2="392" y2="256" stroke="#A29BFE" stroke-width="4"/>
+  <!-- Satellite nodes -->
+  <circle cx="256" cy="100" r="30" fill="#55EFC4"/>
+  <circle cx="400" cy="340" r="30" fill="#00CEC9"/>
+  <circle cx="112" cy="340" r="30" fill="#FFEAA7"/>
+  <circle cx="100" cy="256" r="30" fill="#FF6B6B"/>
+  <circle cx="412" cy="256" r="30" fill="#FD79A8"/>
+  <!-- Node faces -->
+  <circle cx="256" cy="95" r="5" fill="#2D3436"/>
+  <circle cx="400" cy="335" r="5" fill="#2D3436"/>
+  <circle cx="112" cy="335" r="5" fill="#2D3436"/>
+  <circle cx="100" cy="251" r="5" fill="#2D3436"/>
+  <circle cx="412" cy="251" r="5" fill="#2D3436"/>
+  <!-- Central face -->
+  <circle cx="240" cy="250" r="6" fill="#2D3436"/>
+  <circle cx="272" cy="250" r="6" fill="#2D3436"/>
+  <circle cx="256" cy="268" r="8" fill="none" stroke="#2D3436" stroke-width="3"/>
+  <!-- Blush on center -->
+  <ellipse cx="230" cy="265" rx="6" ry="3" fill="#FFB8B8" opacity="0.5"/>
+  <ellipse cx="282" cy="265" rx="6" ry="3" fill="#FFB8B8" opacity="0.5"/>
+  <!-- DApp text -->
+  <text x="256" y="450" font-family="Arial Black, sans-serif" font-size="28" fill="#A29BFE" text-anchor="middle">DApp</text>
+  <!-- Decorative stars -->
+  <polygon points="180,120 183,130 195,130 186,138 190,150 180,142 170,150 174,138 165,130 177,130" fill="#FFEAA7"/>
+  <polygon points="340,140 343,150 355,150 346,158 350,170 340,162 330,170 334,158 325,150 337,150" fill="#55EFC4"/>
 </svg>

@@ -1,17 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="g2" x1="18" y1="14" x2="184" y2="186" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#48D7AB"/>
-      <stop offset="1" stop-color="#4E9DFF"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00CEC9"/>
+      <stop offset="100%" style="stop-color:#0984E3"/>
     </linearGradient>
   </defs>
-  <rect x="8" y="8" width="184" height="184" rx="42" fill="url(#g2)"/>
-  <rect x="30" y="36" width="140" height="128" rx="22" fill="#1A636A" fill-opacity="0.26"/>
-  <g stroke="#EDFFFA" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-    <path d="m76 76-22 24 22 24"/>
-    <path d="m124 76 22 24-22 24"/>
-    <path d="m110 60-20 80"/>
-  </g>
-  <circle cx="52" cy="58" r="6" fill="#D9FFF2"/>
-  <circle cx="72" cy="58" r="6" fill="#D9FFF2" fill-opacity="0.7"/>
+  <rect width="512" height="512" rx="80" fill="url(#bg)"/>
+  <!-- Laptop -->
+  <rect x="100" y="280" width="312" height="180" rx="20" fill="#DFE6E9"/>
+  <rect x="120" y="300" width="272" height="140" rx="10" fill="#2D3436"/>
+  <!-- Screen code -->
+  <rect x="135" y="315" width="60" height="8" rx="2" fill="#00CEC9"/>
+  <rect x="135" y="330" width="90" height="8" rx="2" fill="#74B9FF"/>
+  <rect x="135" y="345" width="70" height="8" rx="2" fill="#FFEAA7"/>
+  <rect x="135" y="360" width="50" height="8" rx="2" fill="#FD79A8"/>
+  <rect x="240" y="315" width="80" height="8" rx="2" fill="#55EFC4"/>
+  <rect x="240" y="330" width="60" height="8" rx="2" fill="#74B9FF"/>
+  <rect x="240" y="345" width="90" height="8" rx="2" fill="#FFEAA7"/>
+  <rect x="240" y="360" width="40" height="8" rx="2" fill="#FD79A8"/>
+  <!-- Keyboard -->
+  <rect x="130" y="450" width="252" height="20" rx="5" fill="#B2BEC3"/>
+  <!-- Cute face on laptop -->
+  <circle cx="256" cy="200" r="60" fill="#FFF8E7"/>
+  <!-- Eyes -->
+  <circle cx="230" cy="185" r="12" fill="#2D3436"/>
+  <circle cx="282" cy="185" r="12" fill="#2D3436"/>
+  <circle cx="233" cy="182" r="4" fill="white"/>
+  <circle cx="285" cy="182" r="4" fill="white"/>
+  <!-- Smile -->
+  <path d="M240 210 Q256 225 272 210" stroke="#2D3436" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Blush -->
+  <ellipse cx="205" cy="205" rx="12" ry="6" fill="#FFB8B8" opacity="0.6"/>
+  <ellipse cx="307" cy="205" rx="12" ry="6" fill="#FFB8B8" opacity="0.6"/>
+  <!-- Glasses -->
+  <circle cx="230" cy="185" r="25" stroke="#2D3436" stroke-width="4" fill="none"/>
+  <circle cx="282" cy="185" r="25" stroke="#2D3436" stroke-width="4" fill="none"/>
+  <line x1="255" y1="185" x2="257" y2="185" stroke="#2D3436" stroke-width="4"/>
 </svg>

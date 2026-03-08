@@ -1,14 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="g4" x1="20" y1="16" x2="186" y2="184" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#3FD2A2"/>
-      <stop offset="1" stop-color="#4A9DFF"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FD79A8"/>
+      <stop offset="100%" style="stop-color:#E84393"/>
     </linearGradient>
   </defs>
-  <rect x="8" y="8" width="184" height="184" rx="42" fill="url(#g4)"/>
-  <rect x="62" y="34" width="76" height="132" rx="18" stroke="#ECFFF8" stroke-width="10"/>
-  <path d="M96 52h8" stroke="#ECFFF8" stroke-width="8" stroke-linecap="round"/>
-  <circle cx="100" cy="140" r="8" fill="#ECFFF8"/>
-  <path d="M34 86c10-14 24-22 42-24" stroke="#D3FFF0" stroke-width="8" stroke-linecap="round"/>
-  <path d="M42 120c8-9 18-14 30-15" stroke="#D3FFF0" stroke-width="8" stroke-linecap="round"/>
+  <rect width="512" height="512" rx="80" fill="url(#bg)"/>
+  <!-- Phone body -->
+  <rect x="156" y="80" width="200" height="352" rx="30" fill="#2D3436"/>
+  <!-- Screen -->
+  <rect x="176" y="120" width="160" height="280" rx="10" fill="#F8F9FA"/>
+  <!-- App icons -->
+  <circle cx="220" cy="160" r="20" fill="#FF6B6B"/>
+  <circle cx="292" cy="160" r="20" fill="#4ECDC4"/>
+  <circle cx="220" cy="200" r="20" fill="#FFEAA7"/>
+  <circle cx="292" cy="200" r="20" fill="#A29BFE"/>
+  <!-- Home button -->
+  <circle cx="256" cy="375" r="15" fill="#636E72"/>
+  <!-- Speaker -->
+  <rect x="226" y="100" width="60" height="6" rx="3" fill="#636E72"/>
+  <!-- Cute face on phone -->
+  <circle cx="256" cy="280" r="35" fill="#FFF8E7"/>
+  <!-- Eyes -->
+  <circle cx="240" cy="270" r="10" fill="#2D3436"/>
+  <circle cx="272" cy="270" r="10" fill="#2D3436"/>
+  <circle cx="243" cy="267" r="3" fill="white"/>
+  <circle cx="275" cy="267" r="3" fill="white"/>
+  <!-- Smile -->
+  <path d="M246 290 Q256 300 266 290" stroke="#2D3436" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Blush -->
+  <ellipse cx="225" cy="285" rx="10" ry="5" fill="#FFB8B8" opacity="0.6"/>
+  <ellipse cx="287" cy="285" rx="10" ry="5" fill="#FFB8B8" opacity="0.6"/>
+  <!-- Notification bubble -->
+  <rect x="310" y="150" width="30" height="20" rx="10" fill="#FF6B6B"/>
+  <text x="325" y="164" font-family="Arial" font-size="12" fill="white" text-anchor="middle">1</text>
 </svg>

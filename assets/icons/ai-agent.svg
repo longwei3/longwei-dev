@@ -1,19 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="g3" x1="22" y1="18" x2="178" y2="182" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#43CFA1"/>
-      <stop offset="1" stop-color="#3F90FF"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A29BFE"/>
+      <stop offset="100%" style="stop-color:#6C5CE7"/>
     </linearGradient>
   </defs>
-  <rect x="8" y="8" width="184" height="184" rx="42" fill="url(#g3)"/>
-  <g stroke="#ECFFF8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="44" y="62" width="112" height="80" rx="22"/>
-    <path d="M100 46v16"/>
-    <path d="M68 98h14"/>
-    <path d="M118 98h14"/>
-    <path d="M72 124c10 8 18 12 28 12s18-4 28-12"/>
-  </g>
-  <circle cx="100" cy="44" r="9" fill="#D7FFF0"/>
-  <path d="M154 64h16" stroke="#D7FFF0" stroke-width="8" stroke-linecap="round"/>
-  <path d="M30 64h16" stroke="#D7FFF0" stroke-width="8" stroke-linecap="round"/>
+  <rect width="512" height="512" rx="80" fill="url(#bg)"/>
+  <!-- Robot head -->
+  <rect x="136" y="100" width="240" height="200" rx="40" fill="#F0F0F0" stroke="#DFE6E9" stroke-width="4"/>
+  <!-- Screen face -->
+  <rect x="166" y="140" width="180" height="120" rx="20" fill="#2D3436"/>
+  <!-- AI brain waves -->
+  <path d="M186 170 Q206 150 226 170 Q246 190 266 170 Q286 150 306 170 Q326 190 326 170" stroke="#00CEC9" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M186 200 Q206 180 226 200 Q246 220 266 200 Q286 180 306 200 Q326 220 326 200" stroke="#A29BFE" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M186 230 Q206 210 226 230 Q246 250 266 230 Q286 210 306 230 Q326 250 326 230" stroke="#00CEC9" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Eyes -->
+  <circle cx="200" cy="180" r="15" fill="#00CEC9"/>
+  <circle cx="312" cy="180" r="15" fill="#00CEC9"/>
+  <circle cx="203" cy="177" r="5" fill="white"/>
+  <circle cx="315" cy="177" r="5" fill="white"/>
+  <!-- Antenna -->
+  <line x1="256" y1="100" x2="256" y2="60" stroke="#DFE6E9" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="256" cy="45" r="15" fill="#FD79A8"/>
+  <circle cx="256" cy="45" r="8" fill="#FF6B81"/>
+  <!-- Ears -->
+  <rect x="110" y="180" width="26" height="50" rx="8" fill="#DFE6E9"/>
+  <rect x="376" y="180" width="26" height="50" rx="8" fill="#DFE6E9"/>
+  <!-- Body -->
+  <rect x="166" y="320" width="180" height="120" rx="25" fill="#F0F0F0" stroke="#DFE6E9" stroke-width="4"/>
+  <!-- Buttons -->
+  <circle cx="216" cy="370" r="20" fill="#00CEC9"/>
+  <circle cx="256" cy="370" r="20" fill="#A29BFE"/>
+  <circle cx="296" cy="370" r="20" fill="#FD79A8"/>
+  <!-- Cute blush -->
+  <ellipse cx="160" cy="250" rx="12" ry="6" fill="#FFB8B8" opacity="0.5"/>
+  <ellipse cx="352" cy="250" rx="12" ry="6" fill="#FFB8B8" opacity="0.5"/>
 </svg>

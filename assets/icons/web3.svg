@@ -1,20 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="g1" x1="20" y1="20" x2="180" y2="180" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#3BCFA0"/>
-      <stop offset="1" stop-color="#3E8BFF"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F7931A"/>
+      <stop offset="100%" style="stop-color:#E27625"/>
     </linearGradient>
-    <radialGradient id="r1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(62 48) rotate(52) scale(74)">
-      <stop stop-color="#D4FFF0"/>
-      <stop offset="1" stop-color="#D4FFF0" stop-opacity="0"/>
-    </radialGradient>
   </defs>
-  <rect x="8" y="8" width="184" height="184" rx="42" fill="url(#g1)"/>
-  <circle cx="62" cy="48" r="40" fill="url(#r1)"/>
-  <g stroke="#EDFFFA" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M100 42 62 64v42l38 22 38-22V64z"/>
-    <path d="M62 64 100 86l38-22"/>
-    <path d="M100 86v42"/>
-  </g>
-  <path d="M42 152c8-12 19-18 34-20" stroke="#D7FFF0" stroke-width="8" stroke-linecap="round"/>
+  <rect width="512" height="512" rx="80" fill="url(#bg)"/>
+  <!-- Hexagon body -->
+  <polygon points="256,80 400,160 400,352 256,432 112,352 112,160" fill="#FFF8E7" stroke="#F7931A" stroke-width="8"/>
+  <!-- Inner hexagon -->
+  <polygon points="256,140 340,190 340,322 256,372 172,322 172,190" fill="#FFF8E7" stroke="#F7931A" stroke-width="4"/>
+  <!-- B symbol -->
+  <text x="256" y="290" font-family="Arial Black, sans-serif" font-size="120" font-weight="bold" fill="#F7931A" text-anchor="middle">B</text>
+  <!-- Cute face -->
+  <circle cx="216" cy="200" r="8" fill="#2D3436"/>
+  <circle cx="296" cy="200" r="8" fill="#2D3436"/>
+  <path d="M236 220 Q256 235 276 220" stroke="#2D3436" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Blush -->
+  <ellipse cx="190" cy="215" rx="15" ry="8" fill="#FFB8B8" opacity="0.6"/>
+  <ellipse cx="322" cy="215" rx="15" ry="8" fill="#FFB8B8" opacity="0.6"/>
 </svg>
