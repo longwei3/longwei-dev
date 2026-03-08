@@ -10,18 +10,6 @@
     <script>
         (function () {
             var pathname = window.location.pathname || '';
-            var rootPaths = pathname === '/' || pathname === '/index.html';
-            if (rootPaths) {
-                var params = new URLSearchParams(window.location.search || '');
-                var currentVersion = params.get('v');
-                var expectedVersion = '20260308-1310';
-                if (currentVersion !== expectedVersion) {
-                    params.set('v', expectedVersion);
-                    var next = pathname + '?' + params.toString() + (window.location.hash || '');
-                    window.location.replace(next);
-                    return;
-                }
-            }
             if (pathname === '/mythic-pets' || pathname === '/mythic-pets/') {
                 var entrySearch = window.location.search || '';
                 var entryHash = window.location.hash || '';
@@ -846,7 +834,7 @@
                 <!-- Custom generated icon set -->
                 <div class="skill-card">
                     <div class="skill-top">
-                        <div class="skill-icon"><img src="assets/icons/web3.svg" alt="Web3 图标" loading="lazy"></div>
+                        <div class="skill-icon"><img src="assets/icons/web3.svg?v=20260308-3" alt="Web3 图标" loading="lazy"></div>
                         <span class="skill-badge">链上架构</span>
                     </div>
                     <h3>Web3 开发</h3>
@@ -854,7 +842,7 @@
                 </div>
                 <div class="skill-card">
                     <div class="skill-top">
-                        <div class="skill-icon"><img src="assets/icons/fullstack.svg" alt="全栈图标" loading="lazy"></div>
+                        <div class="skill-icon"><img src="assets/icons/fullstack.svg?v=20260308-3" alt="全栈图标" loading="lazy"></div>
                         <span class="skill-badge">产品工程</span>
                     </div>
                     <h3>全栈开发</h3>
@@ -862,7 +850,7 @@
                 </div>
                 <div class="skill-card">
                     <div class="skill-top">
-                        <div class="skill-icon"><img src="assets/icons/ai-agent.svg" alt="AI Agent 图标" loading="lazy"></div>
+                        <div class="skill-icon"><img src="assets/icons/ai-agent.svg?v=20260308-3" alt="AI Agent 图标" loading="lazy"></div>
                         <span class="skill-badge">自动化</span>
                     </div>
                     <h3>AI Agent</h3>
@@ -870,7 +858,7 @@
                 </div>
                 <div class="skill-card">
                     <div class="skill-top">
-                        <div class="skill-icon"><img src="assets/icons/mobile.svg" alt="移动开发图标" loading="lazy"></div>
+                        <div class="skill-icon"><img src="assets/icons/mobile.svg?v=20260308-3" alt="移动开发图标" loading="lazy"></div>
                         <span class="skill-badge">移动端</span>
                     </div>
                     <h3>移动开发</h3>
@@ -878,7 +866,7 @@
                 </div>
                 <div class="skill-card">
                     <div class="skill-top">
-                        <div class="skill-icon"><img src="assets/icons/marketing.svg" alt="市场营销图标" loading="lazy"></div>
+                        <div class="skill-icon"><img src="assets/icons/marketing.svg?v=20260308-3" alt="市场营销图标" loading="lazy"></div>
                         <span class="skill-badge">增长</span>
                     </div>
                     <h3>市场营销</h3>
@@ -886,7 +874,7 @@
                 </div>
                 <div class="skill-card">
                     <div class="skill-top">
-                        <div class="skill-icon"><img src="assets/icons/cloud.svg" alt="云服务图标" loading="lazy"></div>
+                        <div class="skill-icon"><img src="assets/icons/cloud.svg?v=20260308-3" alt="云服务图标" loading="lazy"></div>
                         <span class="skill-badge">部署运维</span>
                     </div>
                     <h3>云服务</h3>
@@ -904,7 +892,7 @@
                 <div class="project-card">
                     <a href="https://www.longwei.org.cn/mythic-pets/index.html?v=20260228-2" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;">
                         <div class="project-img project-icon">
-                            <img src="project-mythic-pets.svg" alt="Mythic Pets"></div>
+                            <img src="project-mythic-pets.svg?v=20260308-3" alt="Mythic Pets"></div>
                         <div class="project-info">
                             <div class="tags"><span class="tag">游戏</span><span class="tag">Web3</span></div>
                             <h3>Mythic Pets</h3>
@@ -915,7 +903,7 @@
                 <div class="project-card">
                     <a href="https://www.longwei.org.cn/azure-bay-live2d/mvp-interaction.html?v=20260303-2" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;">
                         <div class="project-img project-icon">
-                            <img src="project-azure-bay.svg" alt="蔚蓝海湾">
+                            <img src="project-azure-bay.svg?v=20260308-3" alt="蔚蓝海湾">
                         </div>
                         <div class="project-info">
                             <div class="tags"><span class="tag">独立游戏</span><span class="tag">互动MVP</span></div>
@@ -927,7 +915,7 @@
                 <div class="project-card">
                     <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;">
                         <div class="project-img project-icon">
-                            <img src="project-ai-robot.svg" alt="AI Agent">
+                            <img src="project-ai-robot.svg?v=20260308-3" alt="AI Agent">
                         </div>
                         <div class="project-info">
                             <div class="tags"><span class="tag">AI Agent</span><span class="tag">开源</span></div>
@@ -938,7 +926,7 @@
                 </div>
                 <div class="project-card">
                     <div class="project-img project-icon">
-                        <img src="assets/icons/cross-platform.svg" alt="跨平台应用图标" loading="lazy">
+                        <img src="assets/icons/cross-platform.svg?v=20260308-3" alt="跨平台应用图标" loading="lazy">
                     </div>
                     <div class="project-info">
                         <div class="tags"><span class="tag">React Native</span></div>
@@ -948,7 +936,7 @@
                 </div>
                 <div class="project-card">
                     <div class="project-img project-icon">
-                        <img src="assets/icons/dapp.svg" alt="DApp 开发图标" loading="lazy">
+                        <img src="assets/icons/dapp.svg?v=20260308-3" alt="DApp 开发图标" loading="lazy">
                     </div>
                     <div class="project-info">
                         <div class="tags"><span class="tag">Next.js</span><span class="tag">Web3</span></div>
@@ -972,7 +960,7 @@
 
     <footer>
         <div style="margin-bottom: 16px;">
-            <img src="seal.svg" alt="龙伟银月" style="height: 48px; opacity: 0.85;">
+            <img src="seal.svg?v=20260308-3" alt="龙伟银月" style="height: 48px; opacity: 0.85;">
         </div>
         <p>© 2026 龙伟 & 银月. Built with OpenClaw AI Agent</p>
     </footer>
